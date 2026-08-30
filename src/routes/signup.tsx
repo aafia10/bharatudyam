@@ -27,6 +27,7 @@ import {
   suggestEmailFix,
 } from "@/lib/auth-validation";
 import type { SignupValues } from "@/lib/auth-validation";
+import { supabase } from "@/lib/supabase";
 
 const STATES = [
   "Andhra Pradesh",
@@ -172,6 +173,25 @@ function SignupPage() {
 
   async function onSubmit(values: SignupValues) {
     try {
+      const { data, error } = await supabase.auth.signUp({
+        email: values.email.trim(),
+        password: values.password,
+        options: {
+          data: {
+            fullName: values.fullName,
+            mobile: values.mobile,
+            businessName: values.businessName,
+            city: values.city,
+            state: values.state,
+          }
+        }
+      });
+
+      if (error) {
+        toast.error(error.message || "Signup failed. Please try again.");
+        return;
+      }
+
       const user = {
         fullName: values.fullName,
         email: values.email,
@@ -206,20 +226,16 @@ function SignupPage() {
         values.password,
       );
 
-      await new Promise((resolve) =>
-        setTimeout(resolve, 600),
-      );
-
       toast.success("Account created successfully!");
 
       navigate({
         to: "/dashboard",
         replace: true,
       });
-    } catch (error) {
+    } catch (error: any) {
       console.error("Signup error:", error);
       toast.error(
-        "Something went wrong. Please try again.",
+        error?.message || "Something went wrong. Please try again.",
       );
     }
   }
