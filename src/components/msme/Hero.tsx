@@ -1,87 +1,135 @@
-import { Award, BarChart3, Search, Sparkles, TrendingUp, Zap } from "lucide-react";
+import {
+  ArrowRight,
+  Map,
+  Sparkles,
+} from "lucide-react";
+
+import { IndiaMap } from "./IndiaMap";
 
 export function Hero() {
   return (
-    <section className="bg-hero relative overflow-hidden">
-      <div className="bg-grid pointer-events-none absolute inset-0 [mask-image:radial-gradient(70%_60%_at_50%_20%,#000,transparent)]" />
-      <div className="relative mx-auto grid max-w-[1400px] items-center gap-16 px-6 py-24 lg:grid-cols-2 lg:py-28">
-        <div>
-          <div className="inline-flex animate-fade-up items-center gap-2 rounded-full border border-border bg-surface/70 px-5 py-3">
-            <Sparkles className="size-4 text-violet" />
-            <span className="text-[15px] font-medium text-foreground/90">
-              Future of MSMEs in India
+    <section className="bg-hero msme-hero relative overflow-hidden">
+      {/* Background grid */}
+      <div className="bg-grid pointer-events-none absolute inset-0 [mask-image:radial-gradient(75%_70%_at_50%_20%,#000,transparent)]" />
+
+      {/* Background glow */}
+      <div className="msme-hero-orb msme-hero-orb-one pointer-events-none" />
+      <div className="msme-hero-orb msme-hero-orb-two pointer-events-none" />
+
+      {/* Main Hero */}
+      <div className="relative mx-auto grid max-w-[1400px] items-center gap-12 px-5 pb-16 pt-14 sm:px-6 sm:pb-20 sm:pt-20 lg:grid-cols-[0.86fr_1.14fr] lg:gap-10 lg:px-8 lg:py-24">
+
+        {/* =====================================================
+            LEFT — HERO CONTENT
+        ===================================================== */}
+
+        <div className="relative z-10 max-w-2xl">
+
+          {/* Eyebrow */}
+          <div
+            className="msme-hero-badge animate-fade-up"
+            style={{ animationDelay: "0ms" }}
+          >
+            <span className="msme-hero-badge-icon">
+              <Sparkles className="size-3.5" />
+            </span>
+
+            <span>Future of MSMEs in India</span>
+
+            <span className="msme-hero-badge-live">
+              AI-powered
             </span>
           </div>
 
+          {/* Heading */}
           <h1
-            className="mt-10 animate-fade-up text-[56px] font-bold leading-[1.06] text-foreground sm:text-[68px] lg:text-[76px]"
+            className="msme-hero-title mt-7 animate-fade-up"
             style={{ animationDelay: "120ms" }}
           >
             Empowering MSMEs with{" "}
-            <span className="text-gradient-gold">AI-Powered Scheme Discovery</span>
+            <span className="text-gradient-gold">
+              AI-Powered Scheme Discovery
+            </span>
           </h1>
 
+          {/* Description */}
           <p
-            className="mt-8 max-w-xl animate-fade-up text-lg leading-relaxed text-muted-foreground"
+            className="msme-hero-description mt-6 max-w-xl animate-fade-up"
             style={{ animationDelay: "240ms" }}
           >
-            Find government schemes, subsidies, loans, and incentives tailored to your business
-            instantly.
+            Discover government schemes, subsidies, loans and incentives
+            matched to your business — across India, state by state.
           </p>
 
+          {/* CTA */}
           <div
-            className="mt-10 flex animate-fade-up flex-wrap items-center gap-5"
+            className="msme-hero-actions mt-8 animate-fade-up"
             style={{ animationDelay: "360ms" }}
           >
-            <button className="flex animate-glow items-center gap-3 rounded-full bg-gradient-gold px-9 py-4 text-lg font-semibold text-primary-foreground transition-transform duration-300 hover:scale-[1.03]">
-              Get Started
-              <Zap className="size-5" strokeWidth={2.4} />
-            </button>
-            <button className="flex items-center gap-3 rounded-full border border-border bg-surface/70 px-9 py-4 text-lg font-semibold text-foreground transition-all duration-300 hover:border-gold/40 hover:bg-surface-2">
-              Explore Schemes
-              <Search className="size-5" />
-            </button>
+            <a
+              href="/signup"
+              className="msme-hero-primary animate-glow group"
+            >
+              <span>Get Started</span>
+
+              <span className="msme-hero-primary-icon">
+                <ArrowRight className="size-4 transition-transform duration-300 group-hover:translate-x-0.5" />
+              </span>
+            </a>
+          </div>
+
+          {/* Trust indicators */}
+          <div
+            className="msme-hero-trust mt-8 animate-fade-up sm:mt-10"
+            style={{ animationDelay: "480ms" }}
+          >
+            <div className="msme-hero-trust-item">
+              <span className="msme-hero-trust-dot" />
+
+              <span>
+                State-wise
+                <strong> discovery</strong>
+              </span>
+            </div>
+
+            <span className="msme-hero-trust-divider" />
+
+            <div className="msme-hero-trust-item">
+              <Map className="size-3.5 text-gold" />
+
+              <span>
+                Government
+                <strong> schemes</strong>
+              </span>
+            </div>
+
+            <span className="msme-hero-trust-divider" />
+
+            <div className="msme-hero-trust-item">
+              <Sparkles className="size-3.5 text-mint" />
+
+              <span>
+                AI-assisted
+                <strong> matching</strong>
+              </span>
+            </div>
           </div>
         </div>
 
-        <div className="animate-float glass p-6" style={{ animationDelay: "200ms" }}>
-          <div className="bg-eligibility flex items-center justify-between rounded-xl border border-border p-6">
-            <div>
-              <p className="text-[15px] text-muted-foreground">Eligibility Score</p>
-              <p className="mt-1 text-4xl font-bold text-gold">94%</p>
-            </div>
-            <TrendingUp className="size-9 text-mint" strokeWidth={2.2} />
-          </div>
+        {/* =====================================================
+            RIGHT — INDIA MAP
+        ===================================================== */}
 
-          <div className="mt-5 grid grid-cols-2 gap-5">
-            <div className="rounded-xl border border-border bg-surface-2/60 p-6">
-              <BarChart3 className="size-6 text-violet" />
-              <p className="mt-6 text-[15px] text-muted-foreground">Est. Subsidy</p>
-              <p className="mt-1 text-2xl font-bold text-foreground">₹50L</p>
-            </div>
-            <div className="rounded-xl border border-border bg-surface-2/60 p-6">
-              <Award className="size-6 text-violet" />
-              <p className="mt-6 text-[15px] text-muted-foreground">Schemes Found</p>
-              <p className="mt-1 text-2xl font-bold text-foreground">12</p>
-            </div>
-          </div>
-
-          <div className="bg-eligibility mt-5 rounded-xl border border-border p-6">
-            <div className="flex items-center gap-4">
-              <span className="flex size-11 items-center justify-center rounded-full bg-gradient-gold">
-                <Sparkles className="size-5 text-primary-foreground" />
-              </span>
-              <div>
-                <p className="text-[17px] font-semibold text-foreground">PMEGP Scheme</p>
-                <p className="text-[15px] text-mint">Highly Eligible</p>
-              </div>
-            </div>
-            <div className="mt-5 h-2 w-full overflow-hidden rounded-full bg-surface-2">
-              <div className="progress-bar h-full w-[88%] rounded-full bg-gradient-gold" />
-            </div>
-          </div>
+        <div
+          className="relative z-10 min-w-0 animate-fade-up"
+          style={{ animationDelay: "180ms" }}
+        >
+          <IndiaMap />
         </div>
       </div>
+
+      {/* Bottom fade */}
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-28 bg-gradient-to-b from-transparent to-background" />
     </section>
   );
 }

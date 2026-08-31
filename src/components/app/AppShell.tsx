@@ -1,22 +1,16 @@
-import {
-  Link,
-  useLocation,
-  useNavigate,
-} from "@tanstack/react-router";
-
+import { Link, useLocation, useNavigate } from "@tanstack/react-router";
 import {
   Bell,
+  ChevronRight,
   FileText,
-  HelpCircle,
   Home,
   LogOut,
   Menu,
   Search,
-  Sparkles,
   Store,
+  UserRound,
   X,
 } from "lucide-react";
-
 import {
   type ReactNode,
   useEffect,
@@ -42,11 +36,6 @@ const navigation = [
     icon: Store,
   },
   {
-    label: "AI Eligibility",
-    to: "/personalized",
-    icon: Sparkles,
-  },
-  {
     label: "Applications",
     to: "/applications",
     icon: FileText,
@@ -61,18 +50,28 @@ const navigation = [
     to: "/notifications",
     icon: Bell,
   },
-  {
-    label: "Help Center",
-    to: "/help",
-    icon: HelpCircle,
-  },
 ] as const;
 
 type User = {
   fullName?: string;
   name?: string;
   email?: string;
+  mobile?: string;
+  phone?: string;
   businessName?: string;
+  city?: string;
+  state?: string;
+  industrySector?: string;
+  sector?: string;
+  businessType?: string;
+  annualTurnover?: string;
+  turnover?: string;
+  numberOfEmployees?: string;
+  employees?: string;
+  plantInvestment?: string;
+  womenOwned?: boolean;
+  scStOwned?: boolean;
+  exporter?: boolean;
 };
 
 function getUser(): User | null {
@@ -97,7 +96,7 @@ function getUser(): User | null {
       const parsed: unknown = JSON.parse(value);
 
       if (
-        parsed !== null &&
+        parsed &&
         typeof parsed === "object" &&
         !Array.isArray(parsed)
       ) {
@@ -137,7 +136,7 @@ export function AppShell({
   const navigate = useNavigate();
   const location = useLocation();
 
-  const [mobileOpen, setMobileOpen] =
+  const [sidebarOpen, setSidebarOpen] =
     useState(false);
 
   const [profileOpen, setProfileOpen] =
@@ -146,14 +145,71 @@ export function AppShell({
   const [user, setUser] =
     useState<User | null>(null);
 
-  useEffect(() => {
-    setUser(getUser());
-  }, [location.pathname]);
+  /* =========================================================
+     LOAD USER
+  ========================================================== */
 
   useEffect(() => {
-    setMobileOpen(false);
+    setUser(getUser());
+  }, []);
+
+  /* =========================================================
+     CLOSE MENUS ON ROUTE CHANGE
+  ========================================================== */
+
+  useEffect(() => {
+    setSidebarOpen(false);
     setProfileOpen(false);
   }, [location.pathname]);
+
+  /* =========================================================
+     PREVENT BACKGROUND SCROLL WHEN SIDEBAR IS OPEN
+  ========================================================== */
+
+  useEffect(() => {
+    if (typeof document === "undefined") {
+      return;
+    }
+
+    if (sidebarOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [sidebarOpen]);
+
+  /* =========================================================
+     ESCAPE KEY
+  ========================================================== */
+
+  useEffect(() => {
+    function handleKeyDown(event: KeyboardEvent) {
+      if (event.key === "Escape") {
+        setSidebarOpen(false);
+        setProfileOpen(false);
+      }
+    }
+
+    window.addEventListener(
+      "keydown",
+      handleKeyDown,
+    );
+
+    return () => {
+      window.removeEventListener(
+        "keydown",
+        handleKeyDown,
+      );
+    };
+  }, []);
+
+  /* =========================================================
+     USER DATA
+  ========================================================== */
 
   const displayName =
     user?.fullName ||
@@ -161,11 +217,27 @@ export function AppShell({
     "Business Owner";
 
   const email =
-    user?.email ||
-    "";
+    user?.email || "";
 
   const initials =
     getInitials(displayName);
+
+  /* =========================================================
+     SIDEBAR
+  ========================================================== */
+
+  function toggleSidebar() {
+    setSidebarOpen((value) => !value);
+    setProfileOpen(false);
+  }
+
+  function closeSidebar() {
+    setSidebarOpen(false);
+  }
+
+  /* =========================================================
+     LOGOUT
+  ========================================================== */
 
   function handleLogout() {
     if (typeof window !== "undefined") {
@@ -194,7 +266,7 @@ export function AppShell({
 
     setUser(null);
     setProfileOpen(false);
-    setMobileOpen(false);
+    setSidebarOpen(false);
 
     navigate({
       to: "/login",
@@ -203,65 +275,91 @@ export function AppShell({
   }
 
   return (
-    <div className="min-h-screen bg-background text-foreground">
+    <div className="app-shell min-h-screen bg-background text-foreground">
 
-      {/* Mobile overlay */}
-      {mobileOpen && (
-        <button
-          type="button"
-          aria-label="Close navigation"
-          className="fixed inset-0 z-40 bg-black/50 backdrop-blur-sm lg:hidden"
-          onClick={() => setMobileOpen(false)}
-        />
-      )}
+      {/* =========================================================
+          SIDEBAR OVERLAY
+      ========================================================== */}
 
-      {/* Sidebar */}
-      <aside
+      <button
+        type="button"
+        aria-label="Close navigation"
+        aria-hidden={!sidebarOpen}
+        tabIndex={sidebarOpen ? 0 : -1}
         className={cn(
-          "fixed inset-y-0 left-0 z-50 flex w-[270px] flex-col",
-          "border-r border-border/60 bg-background/95 backdrop-blur-xl",
-          "transition-transform duration-300",
-          mobileOpen
+          "app-shell-overlay fixed inset-0 z-40",
+          "bg-black/60 backdrop-blur-[2px]",
+          "transition-opacity duration-300",
+          "lg:hidden",
+          sidebarOpen
+            ? "pointer-events-auto opacity-100"
+            : "pointer-events-none opacity-0",
+        )}
+        onClick={closeSidebar}
+      />
+
+      {/* =========================================================
+          SIDEBAR
+      ========================================================== */}
+
+      <aside
+        aria-label="Main navigation"
+        className={cn(
+          "fixed inset-y-0 left-0 z-50 flex",
+          "app-shell-sidebar w-[min(86vw,270px)] flex-col",
+          "border-r border-border/60",
+          "bg-background/98 backdrop-blur-2xl",
+          "shadow-2xl shadow-black/20",
+          "transition-transform duration-300 ease-out",
+          sidebarOpen
             ? "translate-x-0"
-            : "-translate-x-full lg:translate-x-0",
+            : "-translate-x-full",
         )}
       >
 
-        {/* Logo */}
-        <div className="flex h-[76px] items-center justify-between border-b border-border/60 px-5">
+        {/* =======================================================
+            SIDEBAR HEADER
+        ======================================================== */}
+
+        <div className="app-shell-sidebar-header flex min-h-[68px] items-center justify-between border-b border-border/60 px-4">
 
           <Link
             to="/dashboard"
-            className="flex items-center gap-3"
+            onClick={closeSidebar}
+            className="flex min-w-0 items-center gap-3"
           >
-            <Logo size={40} />
+            <Logo size={36} />
 
-            <div>
-              <p className="text-[15px] font-bold tracking-tight text-foreground">
+            <div className="min-w-0">
+              <p className="app-shell-logo-title truncate text-[15px] font-bold leading-tight tracking-tight text-foreground">
                 Bharat Udyam
               </p>
 
-              <p className="text-[10px] font-medium uppercase tracking-[0.16em] text-muted-foreground">
+              <p className="app-shell-logo-subtitle mt-0.5 truncate text-[9px] font-medium uppercase leading-tight tracking-[0.10em] text-muted-foreground">
                 For the Businesses That Build Bharat.
               </p>
             </div>
           </Link>
 
+          {/* CLOSE BUTTON */}
+
           <button
             type="button"
-            className="flex size-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:bg-surface hover:text-foreground lg:hidden"
-            onClick={() => setMobileOpen(false)}
-            aria-label="Close menu"
+            onClick={closeSidebar}
+            className="ml-2 flex size-9 shrink-0 items-center justify-center rounded-lg border border-border/60 bg-surface/40 text-muted-foreground transition-all hover:bg-surface hover:text-foreground active:scale-95"
+            aria-label="Close navigation"
           >
-            <X className="size-5" />
+            <X className="size-[18px]" />
           </button>
-
         </div>
 
-        {/* Navigation */}
-        <div className="flex-1 overflow-y-auto px-3 py-5">
+        {/* =======================================================
+            NAVIGATION
+        ======================================================== */}
 
-          <p className="mb-3 px-3 text-[10px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">
+        <div className="app-shell-nav-scroll flex-1 overflow-y-auto px-3 py-5">
+
+          <p className="app-shell-nav-label mb-2.5 px-2.5 text-[10px] font-semibold uppercase tracking-[0.16em] text-muted-foreground">
             Workspace
           </p>
 
@@ -283,32 +381,47 @@ export function AppShell({
                 <Link
                   key={item.to}
                   to={item.to}
+                  onClick={closeSidebar}
                   className={cn(
-                    "group flex items-center gap-3 rounded-xl px-3 py-2.5",
-                    "text-[13px] font-medium transition-all duration-200",
+                    "group flex min-h-[44px] items-center gap-3 rounded-lg px-3 py-2.5",
+                    "app-shell-nav-link text-[14px] font-medium",
+                    "transition-all duration-200",
                     active
                       ? "bg-gold/10 text-gold"
                       : "text-muted-foreground hover:bg-surface hover:text-foreground",
                   )}
                 >
 
+                  {/* ICON */}
+
                   <span
                     className={cn(
-                      "flex size-8 items-center justify-center rounded-lg transition-colors",
+                      "flex size-8 shrink-0 items-center justify-center rounded-lg",
+                      "transition-colors",
                       active
                         ? "bg-gold/10"
                         : "bg-transparent group-hover:bg-surface-2",
                     )}
                   >
-                    <Icon className="size-[17px]" />
+                    <Icon className="size-[18px]" />
                   </span>
 
-                  <span className="flex-1">
+                  {/* LABEL */}
+
+                  <span className="min-w-0 flex-1 truncate">
                     {item.label}
                   </span>
 
+                  {/* ACTIVE INDICATOR */}
+
                   {active && (
-                    <span className="size-1.5 rounded-full bg-gold" />
+                    <span className="size-1.5 shrink-0 rounded-full bg-gold shadow-[0_0_9px_var(--gold)]" />
+                  )}
+
+                  {/* HOVER ARROW */}
+
+                  {!active && (
+                    <ChevronRight className="size-3.5 shrink-0 opacity-0 transition-all group-hover:translate-x-0.5 group-hover:opacity-50" />
                   )}
 
                 </Link>
@@ -318,37 +431,48 @@ export function AppShell({
           </nav>
         </div>
 
-        {/* User */}
-        <div className="border-t border-border/60 p-3">
+        {/* =======================================================
+            SIDEBAR USER
+        ======================================================== */}
+
+        <div className="app-shell-user border-t border-border/60 p-3">
 
           <div className="flex items-center gap-3 rounded-xl bg-surface/40 p-3">
 
-            <div className="flex size-9 shrink-0 items-center justify-center rounded-full bg-gradient-gold">
-              <span className="text-[11px] font-bold text-primary-foreground">
+            {/* AVATAR */}
+
+            <div className="app-shell-avatar flex size-9 shrink-0 items-center justify-center rounded-full bg-gradient-gold">
+
+              <span className="app-shell-avatar-text text-[12px] font-bold text-primary-foreground">
                 {initials}
               </span>
+
             </div>
+
+            {/* USER INFO */}
 
             <div className="min-w-0 flex-1">
 
-              <p className="truncate text-[12.5px] font-semibold text-foreground">
+              <p className="app-shell-user-name truncate text-[13px] font-semibold text-foreground">
                 {displayName}
               </p>
 
-              <p className="truncate text-[10.5px] text-muted-foreground">
+              <p className="app-shell-user-email truncate text-[11px] text-muted-foreground">
                 {email || "Business account"}
               </p>
 
             </div>
 
+            {/* LOGOUT */}
+
             <button
               type="button"
               onClick={handleLogout}
-              className="flex size-8 shrink-0 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:bg-destructive/10 hover:text-destructive"
+              className="flex size-8 shrink-0 items-center justify-center rounded-lg text-muted-foreground transition-all hover:bg-destructive/10 hover:text-destructive active:scale-95"
               aria-label="Logout"
               title="Logout"
             >
-              <LogOut className="size-4" />
+              <LogOut className="size-[15px]" />
             </button>
 
           </div>
@@ -356,35 +480,74 @@ export function AppShell({
 
       </aside>
 
-      {/* Main */}
-      <div className="min-h-screen lg:pl-[270px]">
+      {/* =========================================================
+          MAIN AREA
+      ========================================================== */}
 
-        {/* Top bar */}
-        <header className="sticky top-0 z-30 border-b border-border/60 bg-background/80 backdrop-blur-xl">
+      <div
+        className={cn(
+          "min-h-screen min-w-0",
+          "transition-[padding] duration-300 ease-out",
+          sidebarOpen
+            ? "lg:pl-[270px]"
+            : "lg:pl-0",
+        )}
+      >
 
-          <div className="flex h-[76px] items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
+        {/* =======================================================
+            TOP NAVBAR
+        ======================================================== */}
 
-            {/* Left */}
-            <div className="flex items-center gap-3">
+        <header className="app-shell-topbar sticky top-0 z-30 border-b border-border/60 bg-background/85 backdrop-blur-xl">
+
+          <div className="app-shell-topbar-inner flex min-h-[64px] items-center justify-between gap-3 px-3 sm:px-5 lg:px-8">
+
+            {/* =================================================
+                LEFT SIDE
+            ================================================== */}
+
+            <div className="flex min-w-0 items-center gap-3">
+
+              {/* MENU BUTTON */}
 
               <button
                 type="button"
-                onClick={() => setMobileOpen(true)}
-                className="flex size-10 items-center justify-center rounded-xl border border-border bg-surface/40 text-muted-foreground transition-colors hover:bg-surface hover:text-foreground lg:hidden"
-                aria-label="Open menu"
+                onClick={toggleSidebar}
+                className={cn(
+                  "flex size-10 shrink-0 items-center justify-center rounded-xl",
+                  "border border-border bg-surface/40",
+                  "text-muted-foreground",
+                  "transition-all duration-200",
+                  "hover:bg-surface hover:text-foreground",
+                  "active:scale-95",
+                )}
+                aria-label={
+                  sidebarOpen
+                    ? "Close navigation"
+                    : "Open navigation"
+                }
+                aria-expanded={sidebarOpen}
               >
-                <Menu className="size-5" />
+                {sidebarOpen ? (
+                  <X className="size-[18px]" />
+                ) : (
+                  <Menu className="size-[18px]" />
+                )}
               </button>
 
-              <div className="hidden items-center gap-2 text-[12px] text-muted-foreground sm:flex">
+              {/* DESKTOP BREADCRUMB */}
 
-                <span>
+              <div className="app-shell-breadcrumb hidden min-w-0 items-center gap-2 text-[13px] text-muted-foreground sm:flex">
+
+                <span className="shrink-0">
                   Bharat Udyam
                 </span>
 
-                <span>/</span>
+                <span className="shrink-0 text-muted-foreground/60">
+                  /
+                </span>
 
-                <span className="font-medium capitalize text-foreground">
+                <span className="app-shell-breadcrumb-current truncate font-medium capitalize text-foreground">
                   {location.pathname
                     .replace(/^\/+/, "")
                     .replace(/-/g, " ")
@@ -394,81 +557,185 @@ export function AppShell({
 
               </div>
 
+              {/* MOBILE TITLE */}
+
+              <div className="app-shell-mobile-title flex min-w-0 items-center sm:hidden">
+
+                <p className="app-shell-mobile-title-text truncate text-[14px] font-semibold text-foreground">
+                  {location.pathname
+                    .replace(/^\/+/, "")
+                    .replace(/-/g, " ")
+                    .replace(/\//g, " / ") ||
+                    "Dashboard"}
+                </p>
+
+              </div>
+
             </div>
 
-            {/* Right */}
-            <div className="flex items-center gap-2">
+            {/* =================================================
+                RIGHT SIDE
+            ================================================== */}
+
+            <div className="flex shrink-0 items-center gap-2">
+
+              {/* SEARCH */}
 
               <button
                 type="button"
-                className="hidden h-10 items-center gap-2 rounded-xl border border-border bg-surface/40 px-3 text-[12px] text-muted-foreground transition-colors hover:bg-surface hover:text-foreground md:flex"
+                className="app-shell-search hidden h-10 items-center gap-2 rounded-xl border border-border bg-surface/40 px-3 text-[13px] text-muted-foreground transition-all hover:border-gold/25 hover:bg-surface hover:text-foreground md:flex"
               >
+
                 <Search className="size-4" />
 
                 <span>
                   Search
                 </span>
 
-                <kbd className="ml-3 rounded border border-border px-1.5 py-0.5 text-[9px]">
+                <kbd className="app-shell-search-shortcut ml-2 rounded border border-border px-1.5 py-0.5 text-[10px]">
                   /
                 </kbd>
+
               </button>
+
+              {/* NOTIFICATIONS */}
 
               <Link
                 to="/notifications"
-                className="relative flex size-10 items-center justify-center rounded-xl border border-border bg-surface/40 text-muted-foreground transition-colors hover:bg-surface hover:text-foreground"
+                className="app-shell-profile-trigger relative flex size-10 items-center justify-center rounded-xl border border-border bg-surface/40 text-muted-foreground transition-all hover:bg-surface hover:text-foreground active:scale-95"
                 aria-label="Notifications"
               >
+
                 <Bell className="size-[17px]" />
 
-                <span className="absolute right-2.5 top-2 size-1.5 rounded-full bg-gold" />
+                <span className="absolute right-2.5 top-2 size-1.5 rounded-full bg-gold shadow-[0_0_8px_var(--gold)]" />
+
               </Link>
 
-              {/* Profile */}
+              {/* PROFILE */}
+
               <div className="relative">
 
                 <button
                   type="button"
                   onClick={() =>
-                    setProfileOpen((value) => !value)
+                    setProfileOpen(
+                      (value) => !value,
+                    )
                   }
-                  className="flex items-center gap-2 rounded-xl border border-border bg-surface/40 p-1.5 pr-2.5 transition-colors hover:bg-surface"
+                  className="flex h-10 items-center gap-2 rounded-xl border border-border bg-surface/40 p-1.5 pr-2.5 transition-all hover:bg-surface active:scale-[0.98]"
+                  aria-expanded={profileOpen}
+                  aria-haspopup="menu"
                 >
 
+                  {/* PROFILE AVATAR */}
+
                   <span className="flex size-7 items-center justify-center rounded-lg bg-gradient-gold">
-                    <span className="text-[9px] font-bold text-primary-foreground">
+
+                    <span className="app-shell-profile-initials text-[10px] font-bold text-primary-foreground">
                       {initials}
                     </span>
+
                   </span>
 
-                  <span className="hidden max-w-[120px] truncate text-[11.5px] font-semibold sm:block">
+                  {/* PROFILE NAME */}
+
+                  <span className="app-shell-profile-name hidden max-w-[140px] truncate text-[13px] font-semibold sm:block">
                     {displayName}
                   </span>
 
                 </button>
 
+                {/* =================================================
+                    PROFILE DROPDOWN
+                ================================================== */}
+
                 {profileOpen && (
-                  <div className="absolute right-0 top-[calc(100%+8px)] z-50 w-56 overflow-hidden rounded-xl border border-border bg-background p-1.5 shadow-2xl">
+                  <div
+                    className="app-shell-profile-menu absolute right-0 top-[calc(100%+8px)] z-50 w-[min(290px,calc(100vw-24px))] overflow-hidden rounded-2xl border border-border bg-background p-1.5 shadow-2xl"
+                    role="menu"
+                  >
 
-                    <div className="border-b border-border px-3 py-2.5">
+                    {/* USER INFO */}
 
-                      <p className="truncate text-[12px] font-semibold">
-                        {displayName}
-                      </p>
+                    <div className="app-shell-profile-info border-b border-border px-3 py-3">
 
-                      <p className="mt-0.5 truncate text-[10.5px] text-muted-foreground">
-                        {email || "Business account"}
-                      </p>
+                      <div className="flex items-center gap-3">
+
+                        <div className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-gradient-gold">
+
+                          <span className="app-shell-avatar-text text-[12px] font-bold text-primary-foreground">
+                            {initials}
+                          </span>
+
+                        </div>
+
+                        <div className="min-w-0">
+
+                          <p className="app-shell-profile-user truncate text-[13px] font-semibold">
+                            {displayName}
+                          </p>
+
+                          <p className="app-shell-profile-email mt-0.5 truncate text-[11px] text-muted-foreground">
+                            {email || "Business account"}
+                          </p>
+
+                        </div>
+
+                      </div>
 
                     </div>
+
+                    {/* MY PROFILE */}
+
+                    <Link
+                      to="/profile"
+                      onClick={() =>
+                        setProfileOpen(false)
+                      }
+                      className="app-shell-profile-item mt-1 flex min-h-[44px] w-full items-center gap-3 rounded-xl px-3 py-2.5 text-[13px] font-medium text-foreground transition-colors hover:bg-surface"
+                      role="menuitem"
+                    >
+
+                      <span className="flex size-8 items-center justify-center rounded-lg bg-gold/10">
+
+                        <UserRound className="size-4 text-gold" />
+
+                      </span>
+
+                      <div className="text-left">
+
+                        <p className="text-[13px] font-semibold">
+                          My Profile
+                        </p>
+
+                        <p className="app-shell-profile-item-description text-[11px] text-muted-foreground">
+                          View your account details
+                        </p>
+
+                      </div>
+
+                      <ChevronRight className="ml-auto size-4 text-muted-foreground" />
+
+                    </Link>
+
+                    {/* LOGOUT */}
 
                     <button
                       type="button"
                       onClick={handleLogout}
-                      className="mt-1 flex w-full items-center gap-2 rounded-lg px-3 py-2 text-[12px] text-muted-foreground hover:bg-destructive/10 hover:text-destructive"
+                      className="app-shell-profile-logout mt-1 flex min-h-[44px] w-full items-center gap-3 rounded-xl px-3 py-2.5 text-[13px] text-muted-foreground transition-colors hover:bg-destructive/10 hover:text-destructive"
+                      role="menuitem"
                     >
-                      <LogOut className="size-3.5" />
+
+                      <span className="flex size-8 items-center justify-center rounded-lg bg-destructive/10">
+
+                        <LogOut className="size-4" />
+
+                      </span>
+
                       Logout
+
                     </button>
 
                   </div>
@@ -482,11 +749,16 @@ export function AppShell({
 
         </header>
 
-        {/* Content */}
-        <main className="w-full">
+        {/* =======================================================
+            PAGE CONTENT
+        ======================================================== */}
 
-          <div className="mx-auto w-full max-w-[1500px] px-4 py-6 sm:px-6 sm:py-8 lg:px-8 lg:py-9">
+        <main className="min-w-0 w-full">
+
+          <div className="app-shell-content mx-auto w-full max-w-[1500px] px-3 py-5 sm:px-5 sm:py-7 lg:px-8 lg:py-9">
+
             {children}
+
           </div>
 
         </main>

@@ -19,6 +19,7 @@ import { Route as HelpRouteImport } from './routes/help'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as NotificationsRouteImport } from './routes/notifications'
 import { Route as PersonalizedRouteImport } from './routes/personalized'
+import { Route as ProfileRouteImport } from './routes/profile'
 import { Route as SchemesRouteImport } from './routes/schemes'
 import { Route as SignupRouteImport } from './routes/signup'
 
@@ -72,6 +73,11 @@ const PersonalizedRoute = PersonalizedRouteImport.update({
   path: '/personalized',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ProfileRoute = ProfileRouteImport.update({
+  id: '/profile',
+  path: '/profile',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SchemesRoute = SchemesRouteImport.update({
   id: '/schemes',
   path: '/schemes',
@@ -94,6 +100,7 @@ export interface FileRoutesByFullPath {
   '/login': typeof LoginRoute
   '/notifications': typeof NotificationsRoute
   '/personalized': typeof PersonalizedRoute
+  '/profile': typeof ProfileRoute
   '/schemes': typeof SchemesRoute
   '/signup': typeof SignupRoute
 }
@@ -108,6 +115,7 @@ export interface FileRoutesByTo {
   '/login': typeof LoginRoute
   '/notifications': typeof NotificationsRoute
   '/personalized': typeof PersonalizedRoute
+  '/profile': typeof ProfileRoute
   '/schemes': typeof SchemesRoute
   '/signup': typeof SignupRoute
 }
@@ -123,6 +131,7 @@ export interface FileRoutesById {
   '/login': typeof LoginRoute
   '/notifications': typeof NotificationsRoute
   '/personalized': typeof PersonalizedRoute
+  '/profile': typeof ProfileRoute
   '/schemes': typeof SchemesRoute
   '/signup': typeof SignupRoute
 }
@@ -139,6 +148,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/notifications'
     | '/personalized'
+    | '/profile'
     | '/schemes'
     | '/signup'
   fileRoutesByTo: FileRoutesByTo
@@ -153,6 +163,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/notifications'
     | '/personalized'
+    | '/profile'
     | '/schemes'
     | '/signup'
   id:
@@ -167,6 +178,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/notifications'
     | '/personalized'
+    | '/profile'
     | '/schemes'
     | '/signup'
   fileRoutesById: FileRoutesById
@@ -182,6 +194,7 @@ export interface RootRouteChildren {
   LoginRoute: typeof LoginRoute
   NotificationsRoute: typeof NotificationsRoute
   PersonalizedRoute: typeof PersonalizedRoute
+  ProfileRoute: typeof ProfileRoute
   SchemesRoute: typeof SchemesRoute
   SignupRoute: typeof SignupRoute
 }
@@ -258,6 +271,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PersonalizedRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/profile': {
+      id: '/profile'
+      path: '/profile'
+      fullPath: '/profile'
+      preLoaderRoute: typeof ProfileRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/schemes': {
       id: '/schemes'
       path: '/schemes'
@@ -286,6 +306,7 @@ const rootRouteChildren: RootRouteChildren = {
   LoginRoute: LoginRoute,
   NotificationsRoute: NotificationsRoute,
   PersonalizedRoute: PersonalizedRoute,
+  ProfileRoute: ProfileRoute,
   SchemesRoute: SchemesRoute,
   SignupRoute: SignupRoute,
 }

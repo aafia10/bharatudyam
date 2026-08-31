@@ -22,6 +22,7 @@ import {
 } from "lucide-react";
 import { useMemo, useState, type ReactNode } from "react";
 
+
 import { AppShell } from "@/components/app/AppShell";
 import { useAuthGuard } from "@/hooks/use-auth-guard";
 import { cn } from "@/lib/utils";
@@ -1531,56 +1532,8 @@ function SchemesPage() {
 
   return (
     <AppShell>
-      <style>{`
-        @keyframes scheme-enter {
-          from {
-            opacity: 0;
-            transform: translateY(12px);
-          }
 
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-
-        @keyframes scheme-glow {
-          0%, 100% {
-            opacity: .25;
-            transform: scale(1);
-          }
-
-          50% {
-            opacity: .55;
-            transform: scale(1.06);
-          }
-        }
-
-        .scheme-enter {
-          animation:
-            scheme-enter
-            .55s
-            cubic-bezier(.22,1,.36,1)
-            both;
-        }
-
-        .scheme-glow {
-          animation:
-            scheme-glow
-            7s
-            ease-in-out
-            infinite;
-        }
-
-        @media (prefers-reduced-motion: reduce) {
-          .scheme-enter,
-          .scheme-glow {
-            animation: none;
-          }
-        }
-      `}</style>
-
-      <main className="relative min-w-0 overflow-hidden">
+      <main className="schemes-page relative min-w-0 overflow-hidden">
         <div className="pointer-events-none absolute -right-32 top-0 size-80 rounded-full bg-gold/[0.055] blur-3xl scheme-glow" />
 
         <div className="pointer-events-none absolute -left-40 top-[34%] size-72 rounded-full bg-mint/[0.035] blur-3xl scheme-glow" />
@@ -1600,12 +1553,12 @@ function SchemesPage() {
             <div className="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
               <div className="min-w-0">
                 <div className="flex flex-wrap items-center gap-2">
-                  <span className="inline-flex items-center gap-1.5 rounded-full border border-gold/15 bg-gold/5 px-2.5 py-1 text-[9px] font-semibold uppercase tracking-[0.14em] text-gold sm:text-[10px]">
+                  <span className="inline-flex items-center gap-1.5 rounded-full border border-gold/15 bg-gold/5 px-2.5 py-1 schemes-badge font-semibold uppercase tracking-[0.14em] text-gold">
                     <Sparkles className="size-3" />
                     Scheme Discovery
                   </span>
 
-                  <span className="rounded-full bg-surface/60 px-2.5 py-1 text-[9px] text-muted-foreground">
+                  <span className="rounded-full bg-surface/60 px-2.5 py-1 schemes-state-badge text-muted-foreground">
                     {state}
                   </span>
                 </div>
@@ -1623,7 +1576,7 @@ function SchemesPage() {
                   available business-profile information.
                 </p>
 
-                <p className="mt-2 text-[10px] text-muted-foreground/55">
+                <p className="mt-2 schemes-tagline text-muted-foreground/55">
                   For the Businesses That Build Bharat.
                 </p>
               </div>
@@ -1657,7 +1610,7 @@ function SchemesPage() {
                     setSearch(e.target.value)
                   }
                   placeholder="Search schemes, policies or benefits..."
-                  className="min-w-0 flex-1 bg-transparent text-[11px] text-foreground outline-none placeholder:text-muted-foreground/60 sm:text-[12px]"
+                  className="min-w-0 flex-1 bg-transparent filter-input text-foreground outline-none placeholder:text-muted-foreground/60"
                 />
 
                 {search && (
@@ -1702,7 +1655,7 @@ function SchemesPage() {
                     setSchemeType(value)
                   }
                   className={cn(
-                    "shrink-0 rounded-full border px-3 py-1.5 text-[9.5px] font-semibold",
+                    "shrink-0 rounded-full border px-3 py-1.5 filter-button font-semibold",
                     schemeType === value
                       ? "border-gold/30 bg-gold/10 text-gold"
                       : "border-border/60 bg-background/20 text-muted-foreground hover:border-gold/20 hover:text-foreground",
@@ -1714,7 +1667,7 @@ function SchemesPage() {
 
               <span className="mx-1 hidden h-5 w-px bg-border/60 sm:block" />
 
-              <div className="flex shrink-0 items-center gap-1.5 text-[9px] font-semibold text-muted-foreground sm:text-[10px]">
+              <div className="flex shrink-0 items-center gap-1.5 category-label font-semibold text-muted-foreground">
                 <Filter className="size-3" />
                 Category
               </div>
@@ -1727,7 +1680,7 @@ function SchemesPage() {
                     setCategory(item)
                   }
                   className={cn(
-                    "shrink-0 rounded-full border px-3 py-1.5 text-[9.5px] font-semibold",
+                    "shrink-0 rounded-full border px-3 py-1.5 filter-button font-semibold",
                     category === item
                       ? "border-gold/30 bg-gold/10 text-gold"
                       : "border-border/60 bg-background/20 text-muted-foreground hover:border-gold/20 hover:text-foreground",
@@ -1769,15 +1722,15 @@ function SchemesPage() {
           <section className="scheme-enter mt-7 sm:mt-9">
             <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
               <div>
-                <p className="text-[9px] font-semibold uppercase tracking-[0.18em] text-gold sm:text-[10px]">
+                <p className="section-kicker font-semibold uppercase tracking-[0.18em] text-gold">
                   Recommended from your profile
                 </p>
 
-                <h2 className="mt-1 text-[20px] font-bold tracking-tight text-foreground sm:text-[23px]">
+                <h2 className="mt-1 section-title font-bold tracking-tight text-foreground">
                   Best matches
                 </h2>
 
-                <p className="mt-1 max-w-xl text-[10px] leading-4 text-muted-foreground sm:text-[11px]">
+                <p className="mt-1 max-w-xl section-description leading-4 text-muted-foreground">
                   Discovery scores use your selected state,
                   sector and available profile signals. They
                   are not final government eligibility
@@ -1785,7 +1738,7 @@ function SchemesPage() {
                 </p>
               </div>
 
-              <p className="text-[10px] text-muted-foreground sm:text-[11px]">
+              <p className="section-meta text-muted-foreground">
                 {state} · {sector}
               </p>
             </div>
@@ -1829,12 +1782,12 @@ function SchemesPage() {
                   Explore more
                 </p>
 
-                <h2 className="mt-1 text-[19px] font-bold text-foreground sm:text-[21px]">
+                <h2 className="mt-1 section-title font-bold text-foreground">
                   Other schemes
                 </h2>
               </div>
 
-              <span className="text-[10px] text-muted-foreground sm:text-[11px]">
+              <span className="section-meta text-muted-foreground">
                 {otherMatches.length} results
               </span>
             </div>
@@ -1867,11 +1820,11 @@ function SchemesPage() {
                 <ShieldCheck className="mt-0.5 size-4 shrink-0 text-mint" />
 
                 <div>
-                  <p className="text-[10px] font-semibold text-foreground sm:text-[11px]">
+                  <p className="document-name font-semibold text-foreground">
                     Verify before you apply
                   </p>
 
-                  <p className="mt-1 text-[9.5px] leading-4 text-muted-foreground sm:text-[10.5px] sm:leading-5">
+                  <p className="mt-1 verify-text leading-4 text-muted-foreground">
                     Scheme information is presented for
                     discovery. Eligibility, benefit amounts,
                     deadlines, application windows and state
@@ -1938,14 +1891,14 @@ function MiniStat({
   value: number;
 }) {
   return (
-    <div className="min-w-0 rounded-xl border border-border/60 bg-background/25 px-3 py-2.5 sm:min-w-[112px] sm:px-4 sm:py-3">
+    <div className="mini-stat min-w-0 rounded-xl border border-border/60 bg-background/25 px-3 py-2.5 sm:min-w-[112px] sm:px-4 sm:py-3">
       <Icon className="size-3.5 text-gold" />
 
-      <p className="mt-1.5 text-[18px] font-bold text-foreground sm:text-[20px]">
+      <p className="mt-1.5 mini-stat-value font-bold text-foreground">
         {value}
       </p>
 
-      <p className="text-[9px] text-muted-foreground sm:text-[10px]">
+      <p className="schemes-state-badge text-muted-foreground sm:text-[10px]">
         {label}
       </p>
     </div>
@@ -1970,15 +1923,15 @@ function SummaryCard({
       </span>
 
       <div className="min-w-0">
-        <p className="text-[8.5px] font-semibold uppercase tracking-[0.12em] text-muted-foreground">
+        <p className="summary-label font-semibold uppercase tracking-[0.12em] text-muted-foreground">
           {label}
         </p>
 
-        <p className="truncate text-[11px] font-bold text-foreground sm:text-[12px]">
+        <p className="summary-value truncate font-bold text-foreground">
           {value}
         </p>
 
-        <p className="truncate text-[8.5px] text-muted-foreground">
+        <p className="scheme-card-ministry truncate text-muted-foreground">
           {detail}
         </p>
       </div>
@@ -2006,7 +1959,7 @@ function SelectControl({
         onChange={(e) =>
           onChange(e.target.value)
         }
-        className="w-full min-w-0 bg-transparent text-[11px] font-medium text-foreground outline-none sm:text-[12px]"
+        className="w-full min-w-0 bg-transparent filter-select font-medium text-foreground outline-none"
       >
         {options.map((option) => (
           <option
@@ -2068,13 +2021,13 @@ function SchemeCard({
 
           <div className="min-w-0 flex-1">
             <div className="flex flex-wrap items-center gap-1.5">
-              <span className="text-[8px] font-bold uppercase tracking-[0.12em] text-muted-foreground">
+              <span className="scheme-card-category font-bold uppercase tracking-[0.12em] text-muted-foreground">
                 {scheme.category}
               </span>
 
               <span
                 className={cn(
-                  "rounded-full px-1.5 py-0.5 text-[7.5px] font-semibold",
+                  "rounded-full px-1.5 py-0.5 scheme-card-location font-semibold",
                   isCentral
                     ? "bg-mint/10 text-mint"
                     : "bg-cyan/10 text-cyan",
@@ -2086,37 +2039,37 @@ function SchemeCard({
               </span>
             </div>
 
-            <h3 className="mt-1 text-[13px] font-bold leading-4.5 text-foreground sm:text-[13.5px]">
+            <h3 className="mt-1 scheme-card-title font-bold leading-4.5 text-foreground">
               {scheme.name}
             </h3>
 
-            <p className="mt-0.5 truncate text-[8.5px] text-muted-foreground">
+            <p className="mt-0.5 scheme-card-ministry truncate text-muted-foreground">
               {scheme.ministry}
             </p>
           </div>
 
           <div className="shrink-0 text-right">
-            <span className="text-[7.5px] uppercase tracking-[0.1em] text-muted-foreground">
+            <span className="scheme-card-match-label uppercase tracking-[0.1em] text-muted-foreground">
               Match
             </span>
 
-            <span className="text-gradient-gold block text-[18px] font-bold leading-none sm:text-[20px]">
+            <span className="scheme-card-match text-gradient-gold block font-bold leading-none">
               {match}%
             </span>
           </div>
         </div>
 
         <div className="mt-3 rounded-xl border border-border/40 bg-background/20 p-2.5">
-          <p className="text-[7.5px] font-semibold uppercase tracking-[0.1em] text-muted-foreground">
+          <p className="scheme-card-location font-semibold uppercase tracking-[0.1em] text-muted-foreground">
             Key benefit
           </p>
 
-          <p className="mt-1 line-clamp-2 text-[9.5px] font-medium leading-4 text-foreground">
+          <p className="mt-1 line-clamp-2 scheme-card-benefit-text font-medium leading-4 text-foreground">
             {scheme.benefit}
           </p>
         </div>
 
-        <p className="mt-2.5 line-clamp-2 text-[9px] leading-4 text-muted-foreground">
+        <p className="mt-2.5 line-clamp-2 scheme-card-description leading-4 text-muted-foreground">
           {scheme.description}
         </p>
 
@@ -2148,7 +2101,7 @@ function SchemeCard({
         </div>
 
         <div className="mt-3 flex items-center justify-between gap-3">
-          <span className="flex min-w-0 items-center gap-1 text-[8.5px] font-semibold text-mint">
+          <span className="flex min-w-0 items-center gap-1 scheme-card-amount font-semibold text-mint">
             <IndianRupee className="size-3 shrink-0" />
 
             <span className="truncate">
@@ -2156,7 +2109,7 @@ function SchemeCard({
             </span>
           </span>
 
-          <span className="flex shrink-0 items-center gap-1 text-[9.5px] font-semibold text-foreground group-hover:text-gold">
+          <span className="flex shrink-0 items-center gap-1 filter-button font-semibold text-foreground group-hover:text-gold">
             View details
 
             <ArrowRight className="size-3 group-hover:translate-x-0.5" />
@@ -2173,7 +2126,7 @@ function Tag({
   children: ReactNode;
 }) {
   return (
-    <span className="rounded-full bg-surface-2/65 px-2 py-1 text-[7.5px] font-medium text-muted-foreground">
+    <span className="rounded-full bg-surface-2/65 px-2 py-1 scheme-tag font-medium text-muted-foreground">
       {children}
     </span>
   );
@@ -2248,7 +2201,7 @@ function SchemeDrawer({
         className="absolute inset-0 cursor-default"
       />
 
-      <aside className="relative flex h-full w-full max-w-[580px] flex-col border-l border-border/70 bg-background shadow-2xl">
+      <aside className="scheme-drawer relative flex h-full w-full max-w-[580px] flex-col border-l border-border/70 bg-background shadow-2xl">
         <div className="flex shrink-0 items-center justify-between border-b border-border/60 px-4 py-3.5 sm:px-6">
           <div className="flex items-center gap-2 text-[10px] font-semibold text-muted-foreground sm:text-[11px]">
             <FileCheck2 className="size-4 text-gold" />
@@ -2294,26 +2247,26 @@ function SchemeDrawer({
                 {scheme.name}
               </h2>
 
-              <p className="mt-2 text-[10.5px] font-medium text-muted-foreground sm:text-[12px]">
+              <p className="mt-2 drawer-ministry font-medium text-muted-foreground">
                 {scheme.ministry}
               </p>
 
               <div className="mt-5 rounded-2xl border border-gold/10 bg-gold/[0.045] p-4 sm:p-5">
-                <p className="text-[8.5px] font-semibold uppercase tracking-[0.16em] text-gold">
+                <p className="drawer-benefit-label font-semibold uppercase tracking-[0.16em] text-gold">
                   What this scheme offers
                 </p>
 
-                <p className="mt-2 text-[13px] font-semibold leading-5 text-foreground sm:text-[15px]">
+                <p className="mt-2 drawer-benefit-text font-semibold leading-5 text-foreground">
                   {scheme.benefit}
                 </p>
 
-                <p className="mt-2 text-[10.5px] leading-5 text-muted-foreground sm:text-[12px]">
+                <p className="mt-2 application-description leading-5 text-muted-foreground">
                   {scheme.amount}
                 </p>
               </div>
 
               <InfoSection title="About the scheme">
-                <p className="text-[11px] leading-5 text-muted-foreground sm:text-[12px]">
+                <p className="drawer-body leading-5 text-muted-foreground">
                   {scheme.description}
                 </p>
               </InfoSection>
@@ -2323,7 +2276,7 @@ function SchemeDrawer({
                   {scheme.whyMatch.map((item) => (
                     <li
                       key={item}
-                      className="flex items-start gap-2.5 text-[11px] leading-5 text-muted-foreground sm:text-[12px]"
+                      className="flex items-start gap-2.5 drawer-body leading-5 text-muted-foreground"
                     >
                       <CheckCircle2 className="mt-0.5 size-3.5 shrink-0 text-mint sm:size-4" />
                       {item}
@@ -2338,7 +2291,7 @@ function SchemeDrawer({
                     (document) => (
                       <div
                         key={document}
-                        className="flex items-center gap-2 rounded-xl border border-border/50 bg-surface/25 px-3 py-2.5 text-[10px] text-foreground sm:text-[11px]"
+                        className="flex items-center gap-2 rounded-xl border border-border/50 bg-surface/25 px-3 py-2.5 drawer-document text-foreground"
                       >
                         <FileText className="size-3.5 shrink-0 text-gold" />
 
@@ -2353,7 +2306,7 @@ function SchemeDrawer({
                 <button
                   type="button"
                   onClick={onStart}
-                  className="flex min-h-11 items-center justify-center gap-2 rounded-xl bg-gradient-gold px-4 py-3 text-[11px] font-semibold text-primary-foreground"
+                  className="flex min-h-11 items-center justify-center gap-2 rounded-xl bg-gradient-gold px-4 py-3 success-dashboard-button font-semibold text-primary-foreground"
                 >
                   Start application
 
@@ -2364,7 +2317,7 @@ function SchemeDrawer({
                   href={scheme.officialUrl}
                   target="_blank"
                   rel="noreferrer"
-                  className="flex min-h-11 items-center justify-center gap-2 rounded-xl border border-border px-4 py-3 text-[10.5px] font-semibold text-foreground hover:border-gold/25"
+                  className="flex min-h-11 items-center justify-center gap-2 rounded-xl border border-border px-4 py-3 drawer-secondary-button font-semibold text-foreground hover:border-gold/25"
                 >
                   View source
 
@@ -2372,7 +2325,7 @@ function SchemeDrawer({
                 </a>
               </div>
 
-              <p className="mt-4 text-[8.5px] leading-4 text-muted-foreground/55">
+              <p className="mt-4 drawer-source leading-4 text-muted-foreground/55">
                 {scheme.source}. Always verify the latest
                 official notification, eligibility conditions
                 and application window before submission.
@@ -2407,7 +2360,7 @@ function InfoSection({
 }) {
   return (
     <section className="mt-6 sm:mt-7">
-      <h3 className="text-[12px] font-bold text-foreground sm:text-[14px]">
+      <h3 className="drawer-section-title font-bold text-foreground">
         {title}
       </h3>
 
@@ -2456,15 +2409,15 @@ function ApplicationFlow({
   return (
     <>
       <div>
-        <span className="text-[9px] font-semibold uppercase tracking-[0.16em] text-gold">
+        <span className="application-kicker font-semibold uppercase tracking-[0.16em] text-gold">
           Pre-qualification
         </span>
 
-        <h2 className="mt-1 text-[22px] font-bold text-foreground sm:text-[24px]">
+        <h2 className="mt-1 application-title font-bold text-foreground">
           Check your application
         </h2>
 
-        <p className="mt-2 text-[10.5px] leading-5 text-muted-foreground sm:text-[12px]">
+        <p className="mt-2 application-description leading-5 text-muted-foreground">
           Answer a few questions and prepare your
           documents. This is a frontend discovery preview;
           final eligibility must be verified against the
@@ -2480,12 +2433,12 @@ function ApplicationFlow({
               className="rounded-2xl border border-border/60 bg-surface/25 p-3.5 sm:p-4"
             >
               <div className="flex gap-3">
-                <span className="flex size-7 shrink-0 items-center justify-center rounded-lg bg-gold/10 text-[10px] font-bold text-gold">
+                <span className="flex size-7 shrink-0 items-center justify-center rounded-lg bg-gold/10 question-number font-bold text-gold">
                   {index + 1}
                 </span>
 
                 <div className="min-w-0 flex-1">
-                  <p className="text-[11px] font-semibold leading-5 text-foreground sm:text-[12.5px]">
+                  <p className="application-question font-semibold leading-5 text-foreground">
                     {question}
                   </p>
 
@@ -2503,7 +2456,7 @@ function ApplicationFlow({
                           )
                         }
                         className={cn(
-                          "min-w-14 rounded-lg border px-3 py-2 text-[10px] font-semibold capitalize",
+                          "min-w-14 rounded-lg border px-3 py-2 answer-button font-semibold capitalize",
                           answers[question] ===
                             value
                             ? "border-gold/35 bg-gold/10 text-gold"
@@ -2524,16 +2477,16 @@ function ApplicationFlow({
       <section className="mt-6 sm:mt-7">
         <div className="flex items-end justify-between">
           <div>
-            <h3 className="text-[12px] font-bold text-foreground sm:text-[14px]">
+            <h3 className="drawer-section-title font-bold text-foreground">
               Required documents
             </h3>
 
-            <p className="mt-1 text-[10px] text-muted-foreground">
+            <p className="mt-1 documents-description text-muted-foreground">
               Upload PDF, JPG or PNG files.
             </p>
           </div>
 
-          <span className="text-[9px] font-semibold text-muted-foreground">
+          <span className="documents-count font-semibold text-muted-foreground">
             {
               Object.values(files).filter(
                 Boolean,
@@ -2565,11 +2518,11 @@ function ApplicationFlow({
                 </span>
 
                 <span className="min-w-0 flex-1">
-                  <span className="block text-[10px] font-semibold text-foreground sm:text-[11px]">
+                  <span className="block document-name font-semibold text-foreground">
                     {document}
                   </span>
 
-                  <span className="mt-0.5 block truncate text-[8.5px] text-muted-foreground">
+                  <span className="mt-0.5 block scheme-card-ministry truncate text-muted-foreground">
                     {files[document]
                       ?.name ??
                       "Click to upload"}
@@ -2599,11 +2552,11 @@ function ApplicationFlow({
           <ShieldCheck className="mt-0.5 size-4 shrink-0 text-mint" />
 
           <div>
-            <p className="text-[11px] font-semibold text-foreground">
+            <p className="what-next-title font-semibold text-foreground">
               What happens next
             </p>
 
-            <p className="mt-1 text-[9.5px] leading-5 text-muted-foreground">
+            <p className="mt-1 what-next-text leading-5 text-muted-foreground">
               Bharat Udyam uses the profile and application
               information to prepare a readiness preview.
               This demo does not send uploaded documents to
@@ -2619,14 +2572,14 @@ function ApplicationFlow({
           !allAnswered || !uploaded
         }
         onClick={onSubmit}
-        className="mt-5 flex min-h-11 w-full items-center justify-center gap-2 rounded-xl bg-gradient-gold px-4 py-3.5 text-[11px] font-semibold text-primary-foreground disabled:cursor-not-allowed disabled:opacity-40"
+        className="mt-5 flex min-h-11 w-full items-center justify-center gap-2 rounded-xl bg-gradient-gold px-4 py-3.5 success-dashboard-button font-semibold text-primary-foreground disabled:cursor-not-allowed disabled:opacity-40"
       >
         Submit application for review
 
         <ArrowRight className="size-3.5" />
       </button>
 
-      <p className="mt-3 text-center text-[8.5px] text-muted-foreground/55">
+      <p className="mt-3 text-center document-file text-muted-foreground/55">
         Demo frontend only — documents are not
         uploaded to a server yet.
       </p>
@@ -2649,15 +2602,15 @@ function SubmissionSuccess({
         <BadgeCheck className="size-7 text-mint" />
       </span>
 
-      <p className="mt-5 text-[9px] font-semibold uppercase tracking-[0.18em] text-mint">
+      <p className="mt-5 success-kicker font-semibold uppercase tracking-[0.18em] text-mint">
         Application created
       </p>
 
-      <h2 className="mt-2 text-[22px] font-bold text-foreground sm:text-[26px]">
+      <h2 className="mt-2 success-title font-bold text-foreground">
         You&apos;re ready for the next step.
       </h2>
 
-      <p className="mt-3 max-w-md text-[10.5px] leading-5 text-muted-foreground sm:text-[12.5px]">
+      <p className="mt-3 max-w-md success-description leading-5 text-muted-foreground">
         Your frontend application for{" "}
         <span className="font-semibold text-foreground">
           {scheme.shortName}
@@ -2681,7 +2634,7 @@ function SubmissionSuccess({
 
       <Link
         to="/dashboard"
-        className="mt-6 flex min-h-11 items-center gap-2 rounded-xl bg-gradient-gold px-5 py-3 text-[11px] font-semibold text-primary-foreground"
+        className="mt-6 flex min-h-11 items-center gap-2 rounded-xl bg-gradient-gold px-5 py-3 success-dashboard-button font-semibold text-primary-foreground"
       >
         Go to dashboard
 
@@ -2700,11 +2653,11 @@ function ScorePreview({
 }) {
   return (
     <div className="rounded-xl border border-border/60 bg-surface/25 p-3 text-left sm:p-4">
-      <p className="text-[8px] uppercase tracking-[0.12em] text-muted-foreground sm:text-[10px]">
+      <p className="score-title uppercase tracking-[0.12em] text-muted-foreground">
         {title}
       </p>
 
-      <p className="mt-1 text-[21px] font-bold text-gradient-gold sm:text-[24px]">
+      <p className="mt-1 score-value font-bold text-gradient-gold">
         {score}
       </p>
 
