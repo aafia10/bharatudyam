@@ -1,5 +1,6 @@
 import { useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
+import { supabase } from "@/lib/supabase";
 
 export type StoredUser = {
   fullName?: string;
@@ -112,14 +113,14 @@ export function useAuthGuard(): AuthGuardResult {
 
     let cancelled = false;
 
-    const checkAuthentication = () => {
+    const checkAuthentication = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+
       if (cancelled) {
         return;
       }
 
-      const authenticated = isAuthenticated();
-
-      if (!authenticated) {
+      if (!session) {
         setUser(null);
         setLoading(false);
 
@@ -131,10 +132,21 @@ export function useAuthGuard(): AuthGuardResult {
         return;
       }
 
-      const storedUser = getStoredUser();
-
-      if (cancelled) {
-        return;
+      // Sync metadata to local storage user object to prevent breaking pages
+      let storedUser = getStoredUser();
+      if (!storedUser || storedUser.email !== session.user.email) {
+        storedUser = {
+          fullName: session.user.user_metadata?.fullName || session.user.user_metadata?.name || session.user.email?.split('@')[0] || "User",
+          name: session.user.user_metadata?.fullName || session.user.user_metadata?.name || session.user.email?.split('@')[0] || "User",
+          email: session.user.email,
+          mobile: session.user.user_metadata?.mobile || "",
+          businessName: session.user.user_metadata?.businessName || "",
+          city: session.user.user_metadata?.city || "",
+          state: session.user.user_metadata?.state || "",
+        };
+        window.localStorage.setItem("bharat-udyam-user", JSON.stringify(storedUser));
+        window.localStorage.setItem("bharat-udyam-authenticated", "true");
+        window.localStorage.setItem("bharat-udyam-user-name", storedUser.fullName || "");
       }
 
       setUser(storedUser);
@@ -143,8 +155,21 @@ export function useAuthGuard(): AuthGuardResult {
 
     checkAuthentication();
 
+    // Listen for auth changes (like logouts)
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(
+      (event, session) => {
+        if (event === "SIGNED_OUT") {
+          setUser(null);
+          navigate({ to: "/login", replace: true });
+        } else if (event === "SIGNED_IN" && session) {
+          checkAuthentication();
+        }
+      }
+    );
+
     return () => {
       cancelled = true;
+      subscription.unsubscribe();
     };
   }, [navigate]);
 

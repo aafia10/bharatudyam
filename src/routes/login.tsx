@@ -19,6 +19,7 @@ import {
   suggestEmailFix,
 } from "@/lib/auth-validation";
 import type { LoginValues } from "@/lib/auth-validation";
+import { supabase } from "@/lib/supabase";
 
 export const Route = createFileRoute("/login")({
   head: () => ({
@@ -74,47 +75,35 @@ function LoginPage() {
 
   async function onSubmit(values: LoginValues) {
     try {
-      const savedEmail = localStorage.getItem(
-        "bharat-udyam-demo-email",
-      );
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email: values.email.trim(),
+        password: values.password,
+      });
 
-      const savedPassword = localStorage.getItem(
-        "bharat-udyam-demo-password",
-      );
-
-      const savedUser = localStorage.getItem(
-        "bharat-udyam-user",
-      );
-
-      if (!savedEmail || !savedPassword || !savedUser) {
-        toast.error(
-          "No account found. Please create an account first.",
-        );
+      if (error) {
+        toast.error(error.message || "Invalid email or password.");
         return;
       }
 
-      const emailMatches =
-        values.email.trim().toLowerCase() ===
-        savedEmail.trim().toLowerCase();
-
-      const passwordMatches =
-        values.password === savedPassword;
-
-      if (!emailMatches || !passwordMatches) {
-        toast.error(
-          "Invalid email or password. Please try again.",
-        );
+      if (!data.user) {
+        toast.error("Authentication failed. No user returned.");
         return;
       }
 
-      await new Promise((resolve) =>
-        setTimeout(resolve, 600),
-      );
+      // Maintain getStoredUser and other pages' expectations
+      const user = {
+        fullName: data.user.user_metadata?.fullName || data.user.user_metadata?.name || data.user.email?.split('@')[0] || "User",
+        name: data.user.user_metadata?.fullName || data.user.user_metadata?.name || data.user.email?.split('@')[0] || "User",
+        email: data.user.email,
+        mobile: data.user.user_metadata?.mobile || "",
+        businessName: data.user.user_metadata?.businessName || "",
+        city: data.user.user_metadata?.city || "",
+        state: data.user.user_metadata?.state || "",
+      };
 
-      localStorage.setItem(
-        "bharat-udyam-authenticated",
-        "true",
-      );
+      localStorage.setItem("bharat-udyam-user", JSON.stringify(user));
+      localStorage.setItem("bharat-udyam-authenticated", "true");
+      localStorage.setItem("bharat-udyam-demo-email", data.user.email || "");
 
       toast.success("Welcome back!");
 
@@ -122,13 +111,20 @@ function LoginPage() {
         to: "/dashboard",
         replace: true,
       });
-    } catch (error) {
+    } catch (error: any) {
       console.error("Login error:", error);
-
-      toast.error(
-        "Something went wrong. Please try again.",
-      );
+      toast.error(error?.message || "Something went wrong. Please try again.");
     }
+  }
+
+  function handleTestLogin() {
+    setValue("email", "test@gmail.com", { shouldValidate: true });
+    setValue("password", "123456", { shouldValidate: true });
+    
+    // We delay slightly to let React Hook Form update form state before submitting
+    setTimeout(() => {
+      handleSubmit(onSubmit)();
+    }, 100);
   }
 
   function handleGoogleClick() {
@@ -285,6 +281,17 @@ function LoginPage() {
                 <Lock className="size-3.5 text-mint" />
                 Secure sign-in
               </span>
+            </div>
+
+            {/* Test Login */}
+            <div className="login-button">
+              <button
+                type="button"
+                onClick={handleTestLogin}
+                className="w-full flex items-center justify-center gap-2 rounded-xl border border-dashed border-gold/40 hover:border-gold bg-gold/5 hover:bg-gold/10 px-5 py-3 text-sm font-bold text-gold transition-all duration-300 cursor-pointer shadow-sm hover:shadow active:scale-[0.99]"
+              >
+                Test Login (Auto-fill & Submit)
+              </button>
             </div>
 
             {/* Sign in */}
