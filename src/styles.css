@@ -5847,3 +5847,575 @@ body {
     font-size: 26px;
   }
 }
+/* ============================================================
+   FINAL HERO + INDIA MAP FIX
+   PASTE THIS AT THE VERY END OF style.css
+   ============================================================ */
+
+/* ------------------------------------------------------------
+   HERO CONTAINER
+   ------------------------------------------------------------ */
+
+.msme-hero {
+  width: 100% !important;
+  min-height: auto !important;
+  height: auto !important;
+  overflow: hidden !important;
+  isolation: isolate;
+}
+
+.msme-hero > .relative {
+  width: 100% !important;
+  max-width: 1400px !important;
+  margin-inline: auto !important;
+  align-items: center !important;
+}
+
+/* ------------------------------------------------------------
+   HERO LEFT CONTENT
+   ------------------------------------------------------------ */
+
+.msme-hero-title {
+  max-width: 700px !important;
+  font-size: clamp(42px, 4.5vw, 68px) !important;
+  line-height: 1.04 !important;
+  letter-spacing: -0.045em !important;
+  font-weight: 750 !important;
+}
+
+.msme-hero-description {
+  max-width: 570px !important;
+  font-size: clamp(15px, 1.1vw, 18px) !important;
+  line-height: 1.7 !important;
+}
+
+.msme-hero-badge {
+  min-height: 36px !important;
+  padding: 6px 11px 6px 7px !important;
+  font-size: 12px !important;
+}
+
+.msme-hero-badge-live {
+  font-size: 10px !important;
+}
+
+.msme-hero-primary,
+.msme-hero-secondary {
+  min-height: 48px !important;
+  padding-inline: 20px !important;
+  font-size: 14px !important;
+}
+
+.msme-hero-trust {
+  margin-top: 22px !important;
+  gap: 10px !important;
+  font-size: 12px !important;
+}
+
+
+/* ============================================================
+   INDIA MAP SECTION
+   ============================================================ */
+
+.msme-hero .india-map-section {
+  width: 100% !important;
+  max-width: 100% !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  min-width: 0 !important;
+}
+
+.msme-hero .india-map-aurora {
+  display: none !important;
+}
+
+.msme-hero .india-map-shell {
+  width: 100% !important;
+  max-width: 100% !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+
+/* ------------------------------------------------------------
+   MAP HEADER
+   ------------------------------------------------------------ */
+
+.msme-hero .india-map-heading {
+  display: flex !important;
+  align-items: flex-end !important;
+  justify-content: space-between !important;
+  gap: 15px !important;
+  margin-bottom: 12px !important;
+}
+
+.msme-hero .india-map-kicker {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  font-size: 10px !important;
+  letter-spacing: 0.16em !important;
+  line-height: 1 !important;
+}
+
+.msme-hero .india-map-title {
+  margin-top: 6px !important;
+  font-size: clamp(23px, 2.3vw, 31px) !important;
+  line-height: 1.1 !important;
+  letter-spacing: -0.025em !important;
+}
+
+.msme-hero .india-map-description {
+  max-width: 430px !important;
+  margin-top: 6px !important;
+  font-size: 12px !important;
+  line-height: 1.5 !important;
+}
+
+.msme-hero .india-map-status {
+  flex-shrink: 0 !important;
+  padding: 6px 9px !important;
+  font-size: 9px !important;
+}
+
+
+/* ============================================================
+   MAP + STATE DETAILS
+   ============================================================ */
+
+.msme-hero .india-map-layout {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1.35fr) minmax(220px, 0.65fr) !important;
+  gap: 12px !important;
+  align-items: stretch !important;
+  margin-top: 12px !important;
+  width: 100% !important;
+}
+
+
+/* ------------------------------------------------------------
+   MAP PANEL
+   ------------------------------------------------------------ */
+
+.msme-hero .india-map-visual {
+  position: relative !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  min-height: 455px !important;
+  height: 455px !important;
+  overflow: hidden !important;
+  border-radius: 22px !important;
+}
+
+.msme-hero .india-map-grid {
+  opacity: 0.3 !important;
+}
+
+.msme-hero .india-svg {
+  position: absolute !important;
+  inset: 6% !important;
+  width: 88% !important;
+  height: 88% !important;
+  overflow: visible !important;
+}
+
+
+/* ------------------------------------------------------------
+   MAP STATE LABELS
+   ------------------------------------------------------------ */
+
+.msme-hero .india-map-label {
+  font-size: 8px !important;
+  letter-spacing: 0.16em !important;
+  opacity: 0.25 !important;
+}
+
+
+/* ------------------------------------------------------------
+   HOTSPOTS
+   ------------------------------------------------------------ */
+
+.msme-hero .india-hotspot small {
+  font-size: 9px !important;
+}
+
+.msme-hero .india-hotspot span {
+  width: 7px !important;
+  height: 7px !important;
+}
+
+
+/* ============================================================
+   STATE DETAILS CARD
+   ============================================================ */
+
+.msme-hero .india-state-card {
+  position: relative !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  min-height: 455px !important;
+  height: 455px !important;
+
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+
+  padding: 17px !important;
+  border-radius: 22px !important;
+}
+
+/* scrollbar */
+
+.msme-hero .india-state-card::-webkit-scrollbar {
+  width: 4px;
+}
+
+.msme-hero .india-state-card::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.msme-hero .india-state-card::-webkit-scrollbar-thumb {
+  background: color-mix(
+    in oklab,
+    var(--muted-foreground) 25%,
+    transparent
+  );
+  border-radius: 999px;
+}
+
+
+/* ------------------------------------------------------------
+   STATE CARD HEADER
+   ------------------------------------------------------------ */
+
+.msme-hero .india-state-card-top {
+  display: flex !important;
+  align-items: center !important;
+  gap: 9px !important;
+}
+
+.msme-hero .india-state-pin {
+  width: 32px !important;
+  height: 32px !important;
+  border-radius: 10px !important;
+}
+
+.msme-hero .india-state-eyebrow {
+  font-size: 8px !important;
+  letter-spacing: 0.14em !important;
+}
+
+.msme-hero .india-state-card h3 {
+  margin-top: 2px !important;
+  padding-right: 28px !important;
+  font-size: 19px !important;
+  line-height: 1.15 !important;
+}
+
+
+/* ------------------------------------------------------------
+   STATE DESCRIPTION
+   ------------------------------------------------------------ */
+
+.msme-hero .india-state-card-description {
+  margin-top: 13px !important;
+  font-size: 11px !important;
+  line-height: 1.55 !important;
+}
+
+
+/* ------------------------------------------------------------
+   SCHEME LIST
+   ------------------------------------------------------------ */
+
+.msme-hero .india-state-scheme-list {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 6px !important;
+  margin-top: 13px !important;
+}
+
+.msme-hero .india-state-scheme {
+  display: flex !important;
+  align-items: flex-start !important;
+  gap: 7px !important;
+
+  padding: 7px 8px !important;
+  border-radius: 9px !important;
+
+  font-size: 10.5px !important;
+  line-height: 1.35 !important;
+}
+
+.msme-hero .india-state-scheme-dot {
+  width: 5px !important;
+  height: 5px !important;
+  margin-top: 4px !important;
+  flex-shrink: 0 !important;
+}
+
+
+/* ------------------------------------------------------------
+   EMPTY STATE
+   ------------------------------------------------------------ */
+
+.msme-hero .india-state-empty {
+  display: flex !important;
+  align-items: center !important;
+  gap: 7px !important;
+
+  margin-top: 13px !important;
+  padding: 9px !important;
+
+  border-radius: 9px !important;
+
+  font-size: 10px !important;
+  line-height: 1.4 !important;
+}
+
+.msme-hero .india-state-empty-state {
+  min-height: 300px !important;
+  padding: 15px !important;
+}
+
+.msme-hero .india-state-empty-icon {
+  width: 42px !important;
+  height: 42px !important;
+  border-radius: 13px !important;
+}
+
+.msme-hero .india-state-empty-title {
+  margin-top: 10px !important;
+  font-size: 17px !important;
+}
+
+.msme-hero .india-state-empty-text {
+  max-width: 190px !important;
+  margin-top: 5px !important;
+  font-size: 11px !important;
+  line-height: 1.5 !important;
+}
+
+
+/* ------------------------------------------------------------
+   CLOSE BUTTON
+   ------------------------------------------------------------ */
+
+.msme-hero .india-state-close {
+  top: 10px !important;
+  right: 10px !important;
+  width: 27px !important;
+  height: 27px !important;
+}
+
+
+/* ------------------------------------------------------------
+   SOURCE
+   ------------------------------------------------------------ */
+
+.msme-hero .india-state-source {
+  margin-top: 9px !important;
+  font-size: 8px !important;
+  line-height: 1.4 !important;
+}
+
+
+/* ------------------------------------------------------------
+   FOOTER
+   ------------------------------------------------------------ */
+
+.msme-hero .india-map-footer {
+  margin-top: 8px !important;
+  gap: 10px !important;
+  font-size: 9px !important;
+}
+
+.msme-hero .india-map-footer-hint {
+  margin-left: auto !important;
+}
+
+
+/* ============================================================
+   1100px
+   ============================================================ */
+
+@media (max-width: 1100px) {
+
+  .msme-hero > .relative {
+    gap: 32px !important;
+  }
+
+  .msme-hero .india-map-layout {
+    grid-template-columns:
+      minmax(0, 1.25fr)
+      minmax(205px, 0.75fr) !important;
+  }
+
+  .msme-hero .india-map-visual,
+  .msme-hero .india-state-card {
+    min-height: 420px !important;
+    height: 420px !important;
+  }
+
+  .msme-hero-title {
+    font-size: clamp(40px, 5vw, 58px) !important;
+  }
+}
+
+
+/* ============================================================
+   MOBILE
+   ============================================================ */
+
+@media (max-width: 767px) {
+
+  .msme-hero {
+    min-height: auto !important;
+  }
+
+  .msme-hero > .relative {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: 34px !important;
+    padding-top: 48px !important;
+    padding-bottom: 48px !important;
+  }
+
+  .msme-hero-title {
+    max-width: 100% !important;
+    font-size: clamp(36px, 10vw, 50px) !important;
+    line-height: 1.04 !important;
+  }
+
+  .msme-hero-description {
+    max-width: 100% !important;
+    font-size: 15px !important;
+    line-height: 1.65 !important;
+  }
+
+  .msme-hero-badge {
+    font-size: 11px !important;
+  }
+
+  .msme-hero-primary,
+  .msme-hero-secondary {
+    width: auto !important;
+    min-height: 46px !important;
+    font-size: 13px !important;
+  }
+
+  .msme-hero-trust {
+    font-size: 10px !important;
+  }
+
+
+  /* MAP HEADER */
+
+  .msme-hero .india-map-heading {
+    align-items: flex-start !important;
+    flex-direction: column !important;
+    gap: 6px !important;
+  }
+
+  .msme-hero .india-map-status {
+    display: none !important;
+  }
+
+  .msme-hero .india-map-title {
+    font-size: 25px !important;
+  }
+
+  .msme-hero .india-map-description {
+    font-size: 11px !important;
+  }
+
+
+  /* MAP ABOVE DETAILS */
+
+  .msme-hero .india-map-layout {
+    grid-template-columns: 1fr !important;
+    gap: 10px !important;
+  }
+
+  .msme-hero .india-map-visual {
+    min-height: 370px !important;
+    height: 370px !important;
+    border-radius: 19px !important;
+  }
+
+  .msme-hero .india-svg {
+    inset: 5% !important;
+    width: 90% !important;
+    height: 90% !important;
+  }
+
+
+  /* DETAILS BELOW MAP */
+
+  .msme-hero .india-state-card {
+    min-height: 0 !important;
+    height: auto !important;
+    max-height: 320px !important;
+    border-radius: 19px !important;
+    padding: 15px !important;
+  }
+
+  .msme-hero .india-state-card h3 {
+    font-size: 18px !important;
+  }
+
+  .msme-hero .india-state-card-description {
+    font-size: 11px !important;
+  }
+
+  .msme-hero .india-state-scheme {
+    font-size: 10.5px !important;
+  }
+
+  .msme-hero .india-hotspot small {
+    display: none !important;
+  }
+
+  .msme-hero .india-map-footer {
+    flex-wrap: wrap !important;
+  }
+
+  .msme-hero .india-map-footer-hint {
+    width: 100% !important;
+    margin-left: 0 !important;
+  }
+}
+
+
+/* ============================================================
+   SMALL PHONES
+   ============================================================ */
+
+@media (max-width: 480px) {
+
+  .msme-hero > .relative {
+    padding-top: 38px !important;
+    padding-bottom: 38px !important;
+    gap: 28px !important;
+  }
+
+  .msme-hero-title {
+    font-size: 35px !important;
+  }
+
+  .msme-hero-description {
+    font-size: 14px !important;
+  }
+
+  .msme-hero .india-map-visual {
+    min-height: 330px !important;
+    height: 330px !important;
+  }
+
+  .msme-hero .india-state-card {
+    max-height: 300px !important;
+  }
+
+  .msme-hero .india-map-title {
+    font-size: 22px !important;
+  }
+}
