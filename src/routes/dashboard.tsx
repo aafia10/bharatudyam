@@ -466,7 +466,7 @@ function DashboardPage() {
                 eyebrow="Matched to your profile"
                 title="Recommended Schemes"
                 description="Schemes that may be relevant to your business."
-                href="/dashboard/schemes"
+                href="/dashboard-schemes"
                 linkText="View all"
               />
 
@@ -609,7 +609,7 @@ function DashboardPage() {
 
               <div className="mt-5 flex flex-col gap-3 sm:flex-row">
                 <Link
-                  to="/dashboard/schemes"
+                  to="/dashboard-schemes"
                   className="group flex min-h-11 items-center justify-center gap-2 rounded-xl bg-gradient-gold px-5 py-3 text-[12px] font-semibold text-primary-foreground shadow-gold transition-all duration-300 hover:-translate-y-0.5 sm:text-[13px]"
                 >
                   Explore schemes
@@ -638,7 +638,7 @@ function DashboardPage() {
               <SectionHeader
                 eyebrow="Recently added"
                 title="New Schemes"
-                href="/dashboard/schemes"
+                href="/dashboard-schemes"
                 linkText="Browse all"
               />
 
@@ -908,7 +908,7 @@ function SchemeRow({
 }) {
   return (
     <Link
-      to="/dashboard/schemes"
+      to="/dashboard-schemes"
       className="bu-card group relative block min-w-0 overflow-hidden rounded-2xl border border-border/50 bg-surface/15 p-4 sm:p-5"
       style={{
         animationDelay:
@@ -1084,7 +1084,7 @@ function NewSchemeCard({
 }) {
   return (
     <Link
-      to="/dashboard/schemes"
+      to="/dashboard-schemes"
       className="bu-card group relative min-w-0 overflow-hidden rounded-2xl border border-border/50 bg-surface/10 p-4 sm:p-5"
       style={{
         animationDelay:
