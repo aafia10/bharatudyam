@@ -11,15 +11,19 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ApplicationsRouteImport } from './routes/applications'
+import { Route as BmDashboardRouteImport } from './routes/bm-dashboard'
+import { Route as CaDashboardRouteImport } from './routes/ca-dashboard'
 import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as DashboardSchemesRouteImport } from './routes/dashboard-schemes'
 import { Route as DocumentsRouteImport } from './routes/documents'
 import { Route as ForgotPasswordRouteImport } from './routes/forgot-password'
 import { Route as HelpRouteImport } from './routes/help'
 import { Route as LoginRouteImport } from './routes/login'
+import { Route as NbfcSignupRouteImport } from './routes/nbfc-signup'
 import { Route as NotificationsRouteImport } from './routes/notifications'
 import { Route as PersonalizedRouteImport } from './routes/personalized'
 import { Route as ProfileRouteImport } from './routes/profile'
+import { Route as RmDashboardRouteImport } from './routes/rm-dashboard'
 import { Route as SchemesRouteImport } from './routes/schemes'
 import { Route as SignupRouteImport } from './routes/signup'
 
@@ -31,6 +35,16 @@ const IndexRoute = IndexRouteImport.update({
 const ApplicationsRoute = ApplicationsRouteImport.update({
   id: '/applications',
   path: '/applications',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BmDashboardRoute = BmDashboardRouteImport.update({
+  id: '/bm-dashboard',
+  path: '/bm-dashboard',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CaDashboardRoute = CaDashboardRouteImport.update({
+  id: '/ca-dashboard',
+  path: '/ca-dashboard',
   getParentRoute: () => rootRouteImport,
 } as any)
 const DashboardRoute = DashboardRouteImport.update({
@@ -63,6 +77,11 @@ const LoginRoute = LoginRouteImport.update({
   path: '/login',
   getParentRoute: () => rootRouteImport,
 } as any)
+const NbfcSignupRoute = NbfcSignupRouteImport.update({
+  id: '/nbfc-signup',
+  path: '/nbfc-signup',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const NotificationsRoute = NotificationsRouteImport.update({
   id: '/notifications',
   path: '/notifications',
@@ -76,6 +95,11 @@ const PersonalizedRoute = PersonalizedRouteImport.update({
 const ProfileRoute = ProfileRouteImport.update({
   id: '/profile',
   path: '/profile',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RmDashboardRoute = RmDashboardRouteImport.update({
+  id: '/rm-dashboard',
+  path: '/rm-dashboard',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SchemesRoute = SchemesRouteImport.update({
@@ -92,30 +116,38 @@ const SignupRoute = SignupRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/applications': typeof ApplicationsRoute
+  '/bm-dashboard': typeof BmDashboardRoute
+  '/ca-dashboard': typeof CaDashboardRoute
   '/dashboard': typeof DashboardRoute
   '/dashboard-schemes': typeof DashboardSchemesRoute
   '/documents': typeof DocumentsRoute
   '/forgot-password': typeof ForgotPasswordRoute
   '/help': typeof HelpRoute
   '/login': typeof LoginRoute
+  '/nbfc-signup': typeof NbfcSignupRoute
   '/notifications': typeof NotificationsRoute
   '/personalized': typeof PersonalizedRoute
   '/profile': typeof ProfileRoute
+  '/rm-dashboard': typeof RmDashboardRoute
   '/schemes': typeof SchemesRoute
   '/signup': typeof SignupRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/applications': typeof ApplicationsRoute
+  '/bm-dashboard': typeof BmDashboardRoute
+  '/ca-dashboard': typeof CaDashboardRoute
   '/dashboard': typeof DashboardRoute
   '/dashboard-schemes': typeof DashboardSchemesRoute
   '/documents': typeof DocumentsRoute
   '/forgot-password': typeof ForgotPasswordRoute
   '/help': typeof HelpRoute
   '/login': typeof LoginRoute
+  '/nbfc-signup': typeof NbfcSignupRoute
   '/notifications': typeof NotificationsRoute
   '/personalized': typeof PersonalizedRoute
   '/profile': typeof ProfileRoute
+  '/rm-dashboard': typeof RmDashboardRoute
   '/schemes': typeof SchemesRoute
   '/signup': typeof SignupRoute
 }
@@ -123,15 +155,19 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/applications': typeof ApplicationsRoute
+  '/bm-dashboard': typeof BmDashboardRoute
+  '/ca-dashboard': typeof CaDashboardRoute
   '/dashboard': typeof DashboardRoute
   '/dashboard-schemes': typeof DashboardSchemesRoute
   '/documents': typeof DocumentsRoute
   '/forgot-password': typeof ForgotPasswordRoute
   '/help': typeof HelpRoute
   '/login': typeof LoginRoute
+  '/nbfc-signup': typeof NbfcSignupRoute
   '/notifications': typeof NotificationsRoute
   '/personalized': typeof PersonalizedRoute
   '/profile': typeof ProfileRoute
+  '/rm-dashboard': typeof RmDashboardRoute
   '/schemes': typeof SchemesRoute
   '/signup': typeof SignupRoute
 }
@@ -140,45 +176,57 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/applications'
+    | '/bm-dashboard'
+    | '/ca-dashboard'
     | '/dashboard'
     | '/dashboard-schemes'
     | '/documents'
     | '/forgot-password'
     | '/help'
     | '/login'
+    | '/nbfc-signup'
     | '/notifications'
     | '/personalized'
     | '/profile'
+    | '/rm-dashboard'
     | '/schemes'
     | '/signup'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/applications'
+    | '/bm-dashboard'
+    | '/ca-dashboard'
     | '/dashboard'
     | '/dashboard-schemes'
     | '/documents'
     | '/forgot-password'
     | '/help'
     | '/login'
+    | '/nbfc-signup'
     | '/notifications'
     | '/personalized'
     | '/profile'
+    | '/rm-dashboard'
     | '/schemes'
     | '/signup'
   id:
     | '__root__'
     | '/'
     | '/applications'
+    | '/bm-dashboard'
+    | '/ca-dashboard'
     | '/dashboard'
     | '/dashboard-schemes'
     | '/documents'
     | '/forgot-password'
     | '/help'
     | '/login'
+    | '/nbfc-signup'
     | '/notifications'
     | '/personalized'
     | '/profile'
+    | '/rm-dashboard'
     | '/schemes'
     | '/signup'
   fileRoutesById: FileRoutesById
@@ -186,15 +234,19 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   ApplicationsRoute: typeof ApplicationsRoute
+  BmDashboardRoute: typeof BmDashboardRoute
+  CaDashboardRoute: typeof CaDashboardRoute
   DashboardRoute: typeof DashboardRoute
   DashboardSchemesRoute: typeof DashboardSchemesRoute
   DocumentsRoute: typeof DocumentsRoute
   ForgotPasswordRoute: typeof ForgotPasswordRoute
   HelpRoute: typeof HelpRoute
   LoginRoute: typeof LoginRoute
+  NbfcSignupRoute: typeof NbfcSignupRoute
   NotificationsRoute: typeof NotificationsRoute
   PersonalizedRoute: typeof PersonalizedRoute
   ProfileRoute: typeof ProfileRoute
+  RmDashboardRoute: typeof RmDashboardRoute
   SchemesRoute: typeof SchemesRoute
   SignupRoute: typeof SignupRoute
 }
@@ -213,6 +265,20 @@ declare module '@tanstack/react-router' {
       path: '/applications'
       fullPath: '/applications'
       preLoaderRoute: typeof ApplicationsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/bm-dashboard': {
+      id: '/bm-dashboard'
+      path: '/bm-dashboard'
+      fullPath: '/bm-dashboard'
+      preLoaderRoute: typeof BmDashboardRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/ca-dashboard': {
+      id: '/ca-dashboard'
+      path: '/ca-dashboard'
+      fullPath: '/ca-dashboard'
+      preLoaderRoute: typeof CaDashboardRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/dashboard': {
@@ -257,6 +323,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LoginRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/nbfc-signup': {
+      id: '/nbfc-signup'
+      path: '/nbfc-signup'
+      fullPath: '/nbfc-signup'
+      preLoaderRoute: typeof NbfcSignupRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/notifications': {
       id: '/notifications'
       path: '/notifications'
@@ -276,6 +349,13 @@ declare module '@tanstack/react-router' {
       path: '/profile'
       fullPath: '/profile'
       preLoaderRoute: typeof ProfileRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/rm-dashboard': {
+      id: '/rm-dashboard'
+      path: '/rm-dashboard'
+      fullPath: '/rm-dashboard'
+      preLoaderRoute: typeof RmDashboardRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/schemes': {
@@ -298,15 +378,19 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   ApplicationsRoute: ApplicationsRoute,
+  BmDashboardRoute: BmDashboardRoute,
+  CaDashboardRoute: CaDashboardRoute,
   DashboardRoute: DashboardRoute,
   DashboardSchemesRoute: DashboardSchemesRoute,
   DocumentsRoute: DocumentsRoute,
   ForgotPasswordRoute: ForgotPasswordRoute,
   HelpRoute: HelpRoute,
   LoginRoute: LoginRoute,
+  NbfcSignupRoute: NbfcSignupRoute,
   NotificationsRoute: NotificationsRoute,
   PersonalizedRoute: PersonalizedRoute,
   ProfileRoute: ProfileRoute,
+  RmDashboardRoute: RmDashboardRoute,
   SchemesRoute: SchemesRoute,
   SignupRoute: SignupRoute,
 }
