@@ -604,7 +604,7 @@ function RMDashboard() {
             </strong>
 
             <span>
-              MSME LENDING
+              For the Businesses That Build Bharat.
             </span>
           </div>
 
