@@ -19,6 +19,7 @@ import {
 
 import { Logo } from "@/components/msme/Logo";
 import { cn } from "@/lib/utils";
+import { supabase } from "@/lib/supabase";
 
 type AppShellProps = {
   children: ReactNode;
@@ -239,7 +240,7 @@ export function AppShell({
      LOGOUT
   ========================================================== */
 
-  function handleLogout() {
+  async function handleLogout() {
     if (typeof window !== "undefined") {
       const authKeys = [
         "bharat-udyam-authenticated",
@@ -254,6 +255,7 @@ export function AppShell({
         "currentUser",
         "user",
         "bharat-udyam-user-name",
+        "bharat-udyam-nbfc-user",
       ];
 
       [
@@ -262,6 +264,12 @@ export function AppShell({
       ].forEach((key) => {
         window.localStorage.removeItem(key);
       });
+    }
+
+    try {
+      await supabase.auth.signOut();
+    } catch (e) {
+      console.error("Supabase signOut error:", e);
     }
 
     setUser(null);

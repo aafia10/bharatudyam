@@ -21,6 +21,23 @@ import {
 import type { LoginValues } from "@/lib/auth-validation";
 import { supabase } from "@/lib/supabase";
 
+function getDashboardRoute(role: string) {
+  switch (role) {
+    case "RM / Field Officer":
+      return "/rm-dashboard";
+    case "Branch Manager":
+      return "/bm-dashboard";
+    case "Credit Analyst":
+      return "/ca-dashboard";
+    case "Operations / Disbursement":
+      return "/rm-dashboard";
+    case "System Admin":
+      return "/rm-dashboard";
+    default:
+      return "/rm-dashboard";
+  }
+}
+
 export const Route = createFileRoute("/login")({
   head: () => ({
     meta: [
@@ -75,10 +92,27 @@ function LoginPage() {
 
   async function onSubmit(values: LoginValues) {
     try {
-      const { data, error } = await supabase.auth.signInWithPassword({
+      let authPassword = values.password;
+      if (/^\d{4}$/.test(values.password)) {
+        authPassword = `nbfc_pin_${values.password}`;
+      }
+
+      let { data, error } = await supabase.auth.signInWithPassword({
         email: values.email.trim(),
-        password: values.password,
+        password: authPassword,
       });
+
+      // If that failed and we transformed a 4-digit password, try original password
+      if (error && authPassword !== values.password) {
+        const retry = await supabase.auth.signInWithPassword({
+          email: values.email.trim(),
+          password: values.password,
+        });
+        if (!retry.error) {
+          data = retry.data;
+          error = null;
+        }
+      }
 
       if (error) {
         toast.error(error.message || "Invalid email or password.");
@@ -87,6 +121,38 @@ function LoginPage() {
 
       if (!data.user) {
         toast.error("Authentication failed. No user returned.");
+        return;
+      }
+
+      const isNbfc = data.user.user_metadata?.userType === "NBFC";
+
+      if (isNbfc) {
+        const nbfcRole = data.user.user_metadata?.role || "RM / Field Officer";
+        const dashboardRoute = getDashboardRoute(nbfcRole);
+
+        const nbfcUser = {
+          fullName: data.user.user_metadata?.fullName || "NBFC User",
+          employeeId: data.user.user_metadata?.employeeId || "",
+          email: data.user.email,
+          mobile: data.user.user_metadata?.mobile || "",
+          role: nbfcRole,
+          branch: data.user.user_metadata?.branch || "",
+          region: data.user.user_metadata?.region || "",
+          userType: "NBFC",
+          dashboardRoute,
+        };
+
+        localStorage.setItem("bharat-udyam-nbfc-user", JSON.stringify(nbfcUser));
+        localStorage.setItem("bharat-udyam-user", JSON.stringify(nbfcUser));
+        localStorage.setItem("bharat-udyam-authenticated", "true");
+        localStorage.setItem("bharat-udyam-demo-email", data.user.email || "");
+
+        toast.success(`Welcome back, ${nbfcUser.fullName}!`);
+
+        navigate({
+          to: dashboardRoute,
+          replace: true,
+        });
         return;
       }
 
@@ -122,6 +188,15 @@ function LoginPage() {
     setValue("password", "123456", { shouldValidate: true });
     
     // We delay slightly to let React Hook Form update form state before submitting
+    setTimeout(() => {
+      handleSubmit(onSubmit)();
+    }, 100);
+  }
+
+  function handleTestNbfcLogin() {
+    setValue("email", "test_nbfc_probe@example.com", { shouldValidate: true });
+    setValue("password", "1234", { shouldValidate: true });
+
     setTimeout(() => {
       handleSubmit(onSubmit)();
     }, 100);
@@ -283,14 +358,21 @@ function LoginPage() {
               </span>
             </div>
 
-            {/* Test Login */}
-            <div className="login-button">
+            {/* Test Login Buttons */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
               <button
                 type="button"
                 onClick={handleTestLogin}
-                className="w-full flex items-center justify-center gap-2 rounded-xl border border-dashed border-gold/40 hover:border-gold bg-gold/5 hover:bg-gold/10 px-5 py-3 text-sm font-bold text-gold transition-all duration-300 cursor-pointer shadow-sm hover:shadow active:scale-[0.99]"
+                className="w-full flex items-center justify-center gap-1.5 rounded-xl border border-dashed border-gold/40 hover:border-gold bg-gold/5 hover:bg-gold/10 px-3 py-2.5 text-xs font-bold text-gold transition-all duration-300 cursor-pointer shadow-sm hover:shadow active:scale-[0.99]"
               >
-                Test Login (Auto-fill & Submit)
+                Test MSME Login
+              </button>
+              <button
+                type="button"
+                onClick={handleTestNbfcLogin}
+                className="w-full flex items-center justify-center gap-1.5 rounded-xl border border-dashed border-mint/40 hover:border-mint bg-mint/5 hover:bg-mint/10 px-3 py-2.5 text-xs font-bold text-mint transition-all duration-300 cursor-pointer shadow-sm hover:shadow active:scale-[0.99]"
+              >
+                Test NBFC RM Login
               </button>
             </div>
 
@@ -358,16 +440,27 @@ function LoginPage() {
               </p>
             </div>
 
-            {/* Signup */}
-            <p className="login-signup pt-1 text-center text-sm text-muted-foreground">
-              New to Bharat Udyam?{" "}
-              <Link
-                to="/signup"
-                className="font-semibold text-gold transition-all duration-300 hover:underline"
-              >
-                Create an account
-              </Link>
-            </p>
+            {/* Signup & NBFC Links */}
+            <div className="login-signup pt-1 text-center space-y-2">
+              <p className="text-sm text-muted-foreground">
+                New to Bharat Udyam?{" "}
+                <Link
+                  to="/signup"
+                  className="font-semibold text-gold transition-all duration-300 hover:underline"
+                >
+                  Create an account
+                </Link>
+              </p>
+              <p className="text-xs text-muted-foreground">
+                NBFC Partner Team?{" "}
+                <Link
+                  to="/nbfc-signup"
+                  className="font-semibold text-mint transition-all duration-300 hover:underline"
+                >
+                  Register as NBFC
+                </Link>
+              </p>
+            </div>
           </form>
         </div>
 

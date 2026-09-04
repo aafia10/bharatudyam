@@ -17,6 +17,7 @@ import {
 } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
+import { supabase } from "@/lib/supabase";
 
 export const Route = createFileRoute("/nbfc-signup")({
   head: () => ({
@@ -108,6 +109,23 @@ function NbfcSignupPage() {
   const [resendTimer, setResendTimer] = useState(0);
 
   const [completed, setCompleted] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+
+  function fillDemoNbfc() {
+    const randomNum = Math.floor(1000 + Math.random() * 9000);
+    setForm({
+      fullName: "Anand Verma",
+      employeeId: `NBFC-RM-${randomNum}`,
+      email: `rm.anand_${randomNum}@nbfc-finance.com`,
+      mobile: "9876543210",
+      role: "RM / Field Officer",
+      branch: "Andheri West",
+      region: "Mumbai North",
+      pin: "1234",
+      confirmPin: "1234",
+    });
+    toast.success("Demo NBFC details pre-filled!");
+  }
 
   const [form, setForm] = useState<FormState>({
     fullName: "",
@@ -338,7 +356,7 @@ function NbfcSignupPage() {
    * ============================================================
    */
 
-  function finishRegistration() {
+  async function finishRegistration() {
     if (form.pin.length !== 4) {
       toast.error("PIN must contain 4 digits.");
       return;
@@ -349,28 +367,73 @@ function NbfcSignupPage() {
       return;
     }
 
-    const dashboardRoute = getDashboardRoute(form.role);
+    setSubmitting(true);
 
-    localStorage.setItem(
-      "bharat-udyam-nbfc-user",
-      JSON.stringify({
-        fullName: form.fullName,
-        employeeId: form.employeeId,
-        email: form.email,
-        mobile: form.mobile,
+    try {
+      const authPassword = `nbfc_pin_${form.pin}`;
+      const { data, error } = await supabase.auth.signUp({
+        email: form.email.trim().toLowerCase(),
+        password: authPassword,
+        options: {
+          data: {
+            fullName: form.fullName.trim(),
+            employeeId: form.employeeId.trim(),
+            mobile: form.mobile.trim(),
+            role: form.role,
+            branch: form.branch,
+            region: form.region,
+            userType: "NBFC",
+            pin: form.pin,
+          },
+        },
+      });
+
+      if (error) {
+        toast.error(error.message || "Failed to register NBFC account.");
+        setSubmitting(false);
+        return;
+      }
+
+      const dashboardRoute = getDashboardRoute(form.role);
+
+      const nbfcUser = {
+        fullName: form.fullName.trim(),
+        employeeId: form.employeeId.trim(),
+        email: form.email.trim().toLowerCase(),
+        mobile: form.mobile.trim(),
         role: form.role,
         branch: form.branch,
         region: form.region,
         userType: "NBFC",
         dashboardRoute,
-      }),
-    );
+      };
 
-    setCompleted(true);
+      localStorage.setItem(
+        "bharat-udyam-nbfc-user",
+        JSON.stringify(nbfcUser),
+      );
 
-    toast.success(
-      "NBFC profile created successfully!",
-    );
+      localStorage.setItem(
+        "bharat-udyam-user",
+        JSON.stringify(nbfcUser),
+      );
+
+      localStorage.setItem(
+        "bharat-udyam-authenticated",
+        "true",
+      );
+
+      setCompleted(true);
+
+      toast.success(
+        "NBFC profile registered successfully in Supabase!",
+      );
+    } catch (err: any) {
+      console.error("NBFC signup error:", err);
+      toast.error(err?.message || "Something went wrong. Please try again.");
+    } finally {
+      setSubmitting(false);
+    }
   }
 
   /*
@@ -673,6 +736,16 @@ function NbfcSignupPage() {
                     Enter your official employee information.
                   </p>
 
+                </div>
+
+                <div className="mb-4 flex justify-end">
+                  <button
+                    type="button"
+                    onClick={fillDemoNbfc}
+                    className="inline-flex items-center gap-1.5 rounded-lg border border-dashed border-mint/40 bg-mint/5 hover:bg-mint/10 px-3 py-1.5 text-xs font-semibold text-mint transition-colors cursor-pointer"
+                  >
+                    Auto-fill Demo NBFC Details
+                  </button>
                 </div>
 
                 <div className="bu-nbfc-fields space-y-5">
@@ -1272,9 +1345,8 @@ function NbfcSignupPage() {
                   <CheckCircle2 className="mt-0.5 size-4 shrink-0 text-mint" />
 
                   <p className="text-xs leading-5 text-muted-foreground">
-                    Your identity is verified. This PIN is
-                    currently used only for the frontend
-                    demonstration.
+                    Your identity is verified. Your account and 4-digit PIN
+                    access will be securely registered in Supabase.
                   </p>
                 </div>
 
@@ -1290,6 +1362,7 @@ function NbfcSignupPage() {
               {step > 1 && (
                 <button
                   type="button"
+                  disabled={submitting}
                   onClick={() => {
                     setStep(
                       (current) =>
@@ -1301,7 +1374,7 @@ function NbfcSignupPage() {
                       setOtp("");
                     }
                   }}
-                  className="bu-nbfc-back-button flex min-h-12 items-center justify-center gap-2 rounded-xl border border-border bg-surface-2/40 px-5 py-3.5 text-sm font-semibold text-muted-foreground sm:w-auto"
+                  className="bu-nbfc-back-button flex min-h-12 items-center justify-center gap-2 rounded-xl border border-border bg-surface-2/40 px-5 py-3.5 text-sm font-semibold text-muted-foreground sm:w-auto disabled:cursor-not-allowed disabled:opacity-60"
                 >
                   <ArrowLeft className="size-4" />
                   Back
@@ -1313,12 +1386,18 @@ function NbfcSignupPage() {
                 onClick={handleNext}
                 disabled={
                   sendingOtp ||
-                  verifyingOtp
+                  verifyingOtp ||
+                  submitting
                 }
                 className="bu-nbfc-primary-button flex min-h-12 flex-1 items-center justify-center gap-2 rounded-xl px-5 py-3.5 text-sm font-bold disabled:cursor-not-allowed disabled:opacity-60"
               >
 
-                {sendingOtp ? (
+                {submitting ? (
+                  <>
+                    <Loader2 className="size-4 animate-spin" />
+                    Registering with Supabase...
+                  </>
+                ) : sendingOtp ? (
                   <>
                     <Loader2 className="size-4 animate-spin" />
                     Sending OTP...

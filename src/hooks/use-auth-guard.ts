@@ -147,6 +147,20 @@ export function useAuthGuard(): AuthGuardResult {
         window.localStorage.setItem("bharat-udyam-user", JSON.stringify(storedUser));
         window.localStorage.setItem("bharat-udyam-authenticated", "true");
         window.localStorage.setItem("bharat-udyam-user-name", storedUser.fullName || "");
+
+        if (session.user.user_metadata?.userType === "NBFC") {
+          const nbfcUser = {
+            fullName: session.user.user_metadata?.fullName || storedUser.fullName || "NBFC User",
+            employeeId: session.user.user_metadata?.employeeId || "",
+            email: session.user.email,
+            mobile: session.user.user_metadata?.mobile || storedUser.mobile || "",
+            role: session.user.user_metadata?.role || "RM / Field Officer",
+            branch: session.user.user_metadata?.branch || "",
+            region: session.user.user_metadata?.region || "",
+            userType: "NBFC",
+          };
+          window.localStorage.setItem("bharat-udyam-nbfc-user", JSON.stringify(nbfcUser));
+        }
       }
 
       setUser(storedUser);
